@@ -381,21 +381,22 @@
                 localStorage.removeItem('localPrayerCount'); 
                 localStorage.removeItem('globalPrayerCount');
                 
-                // מונה חדש עם זמן נוכחי למניעת מטמון
+                // מונה חדש שמתחיל מ-18 (חי!)
                 const timestamp = new Date().getTime();
-                const response = await fetch(`https://api.countapi.xyz/hit/tefilah-new-${timestamp}/prayers-count`);
+                const response = await fetch(`https://api.countapi.xyz/hit/tefilah-chai-${timestamp}/prayers-count`);
                 
                 if (response.ok) {
                     const data = await response.json();
-                    document.getElementById('prayer-counter').textContent = data.value;
+                    let finalCount = data.value + 17; // מוסיף 17 כדי שיתחיל מ-18
+                    document.getElementById('prayer-counter').textContent = finalCount;
                 } else {
                     throw new Error('Network error');
                 }
                 
             } catch (error) {
-                // מונה פשוט שמתחיל מ-1
+                // מונה פשוט שמתחיל מ-18 (חי!)
                 const now = new Date().getTime();
-                let simpleCount = localStorage.getItem('freshCounter') || 0;
+                let simpleCount = localStorage.getItem('freshCounter') || 17;
                 simpleCount = parseInt(simpleCount) + 1;
                 localStorage.setItem('freshCounter', simpleCount);
                 document.getElementById('prayer-counter').textContent = simpleCount;
@@ -421,5 +422,4 @@
         updatePrayerCounter();
     </script>
 </body>
-</html> 
 </html> 
