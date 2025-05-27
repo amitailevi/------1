@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תפילת השל"ה הקדוש</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Frank Ruhl Libre', serif;
+            background: linear-gradient(45deg, #1e3c72 0%, #2a5298 50%, #4a90e2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* כוכבים מנצנצים */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+            border: 3px solid #d4af37;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 3em;
+            color: #1e3c72;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            color: #666;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        .prayer-content {
+            font-size: 1.4em;
+            line-height: 2.2;
+            color: #333;
+            text-align: center;
+            margin: 30px 0;
+            font-weight: 400;
+        }
+        
+        .prayer-line {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .prayer-line:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border-right: 4px solid #d4af37;
+            font-weight: 500;
+        }
+        
+        .decoration {
+            text-align: center;
+            font-size: 2em;
+            color: #d4af37;
+            margin: 20px 0;
+        }
+        
+        .blessing-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #d4af37;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .amen-button {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+            color: #1e3c72;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+            font-family: 'Frank Ruhl Libre', serif;
+        }
+        
+        .amen-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-style: italic;
+            border-top: 1px solid #d4af37;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">תפילת השל"ה הקדוש</h1>
+            <p class="subtitle">לזכות הילדים לגדל אותם לתורה ולחופה ולמעשים טובים</p>
+        </div>
+        
+        <div class="decoration">✦ ✧ ✦</div>
+        
+        <div class="prayer-content">
+            <div class="prayer-line highlight">
+                יְהִי רָצוֹן מִלְּפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ
+            </div>
+            
+            <div class="blessing-box">
+                <div class="prayer-line">
+                    שֶׁתַּזְכֵּנִי לְגַדֵּל אֶת בָּנַי וּבְנוֹת בָּנַי
+                </div>
+                <div class="prayer-line">
+                    לְהַחֲכִימָם וּלְהַשְׂכִּילָם בְּחָכְמָה בְּבִינָה וּבְדַעַת
+                </div>
+            </div>
+            
+            <div class="prayer-line">
+                שֶׁיִּהְיוּ עוֹסְקִים בְּתוֹרָתֶךָ וּמְקַיְּמִים מִצְוֹתֶיךָ
+            </div>
+            
+            <div class="decoration">❋</div>
+            
+            <div class="prayer-line highlight">
+                וְתֵן בְּלִבָּם יִרְאָתְךָ כָּל יְמֵי חַיֵּיהֶם
+            </div>
+            
+            <div class="prayer-line">
+                שֶׁיִּהְיוּ צַדִּיקִים וַחֲסִידִים וְכֹל מַעֲשֵׂיהֶם לְשֵׁם שָׁמַיִם
+            </div>
+            
+            <div class="blessing-box">
+                <div class="prayer-line">
+                    וְתֵן חֶלְקָם בְּתוֹרָתֶךָ הַקְּדוֹשָׁה
+                </div>
+                <div class="prayer-line">
+                    וְזַכֵּנִי לִרְאוֹת בִּבְנֵי בָנַי עוֹסְקִים בְּתוֹרָה וּבְמִצְוֹת
+                </div>
+            </div>
+            
+            <div class="prayer-line highlight">
+                מֵעַתָּה וְעַד עוֹלָם. אָמֵן כֵּן יְהִי רָצוֹן
+            </div>
+        </div>
+        
+        <button class="amen-button" onclick="sayAmen()">אָמֵן!</button>
+        
+        <div class="decoration">✦ ✧ ✦</div>
+        
+        <div class="footer">
+            תפילה זו נאמרת בכוונה טהורה לזכות הילדים<br>
+            "כִּי הֵם חַיֵּינוּ וְאֹרֶךְ יָמֵינוּ"
+        </div>
+    </div>
+
+    <script>
+        // יצירת כוכבים מנצנצים
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 50;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        function sayAmen() {
+            const button = document.querySelector('.amen-button');
+            button.style.background = 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)';
+            button.textContent = 'אָמֵן וְאָמֵן! 🙏';
+            
+            setTimeout(() => {
+                button.style.background = 'linear-gradient(135deg, #d4af37 0%, #ffd700 100%)';
+                button.textContent = 'אָמֵן!';
+            }, 2000);
+        }
+        
+        // הפעלת הכוכבים
+        createStars();
+    </script>
+</body>
+</html> 
