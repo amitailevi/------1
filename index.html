@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניסוי 1 - האתר שלי</title>
+    <style>
+        body {
+            font-family: Arial, Hebrew;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .welcome {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-right: 5px solid #007bff;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d4edda;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 האתר שלי עובד שוב!</h1>
+        
+        <div class="welcome">
+            <h2>ברוך הבא לניסוי שלך!</h2>
+            <p>תיקנו את הקובץ! הכל עובד מצוין שוב! 🎉</p>
+        </div>
+        
+        <button onclick="showMessage()">לחץ כאן לבדיקה!</button>
+        
+        <div id="result">
+            <h3>מעולה! הכפתור עובד! ✨</h3>
+            <p>עכשיו תוכל להתחיל לבנות את האתר שלך...</p>
+        </div>
+    </div>
+
+    <script>
+        function showMessage() {
+            document.getElementById('result').style.display = 'block';
+            document.querySelector('button').textContent = 'עבד מצוין! 🎯';
+        }
+    </script>
+</body>
+</html> 
