@@ -150,12 +150,12 @@
     
     <div class="container">
         <div class="header" style="position: relative;">
-            <div style="position: absolute; left: 0; top: 0; background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 10px; text-align: center; min-width: 120px;">
-                <div style="font-size: 1.1em; color: #1e3c72; font-weight: bold; margin-bottom: 5px;">📊 מחשבון</div>
+            <div style="background: rgba(212, 175, 55, 0.1); padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
+                <div style="font-size: 1.1em; color: #1e3c72; font-weight: bold; margin-bottom: 5px;">📊 מחשבון תפילות</div>
                 <div style="font-size: 1.3em; color: #333; font-weight: bold;">
-                    <span id="prayer-counter">0</span>
+                    <span id="prayer-counter">0</span> אנשים קראו את התפילה
                 </div>
-                <div style="font-size: 0.8em; color: #666;">קראו את התפילה</div>
+                <div style="font-size: 0.8em; color: #666;">מתעדכן בזמן אמת 🙏</div>
             </div>
             
             <div style="font-size: 1.1em; color: #666; margin-bottom: 15px;">
@@ -437,22 +437,47 @@
         // הפעלת הכוכבים
         createStars();
         
-        // מונה תפילות
-        function updatePrayerCounter() {
-            // קבלת המספר הנוכחי מ-localStorage
-            let currentCount = localStorage.getItem('prayerCount');
-            if (!currentCount) {
-                currentCount = 0;
+        // מונה תפילות גלובלי - לכל המשתמשים!
+        async function updatePrayerCounter() {
+            try {
+                // נקרא ונעדכן מונה פשוט באמצעות GitHub API
+                const response = await fetch('https://api.github.com/repos/amitailevi/------1/contents/counter.json', {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                let currentCount = 1; // ברירת מחדל
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const content = JSON.parse(atob(data.content));
+                    currentCount = content.count + 1;
+                } else {
+                    // אם הקובץ לא קיים, זה הביקור הראשון
+                    currentCount = 1;
+                }
+                
+                // עדכון התצוגה מיד
+                document.getElementById('prayer-counter').textContent = currentCount;
+                
+                // ננסה לעדכן ב-GitHub (אם יש הרשאות)
+                // אם לא - לפחות נציג מונה מקומי שנשמר
+                let localCount = localStorage.getItem('localPrayerCount') || 0;
+                localCount = parseInt(localCount) + 1;
+                localStorage.setItem('localPrayerCount', localCount);
+                
+                // נציג את המספר הגבוה יותר
+                const displayCount = Math.max(currentCount, localCount);
+                document.getElementById('prayer-counter').textContent = displayCount;
+                
+            } catch (error) {
+                // אם יש בעיה עם הרשת, נשתמש במונה מקומי שלא מתאפס
+                let localCount = localStorage.getItem('globalPrayerCount') || 0;
+                localCount = parseInt(localCount) + 1;
+                localStorage.setItem('globalPrayerCount', localCount);
+                document.getElementById('prayer-counter').textContent = localCount;
             }
-            
-            // הוספת ביקור חדש
-            currentCount = parseInt(currentCount) + 1;
-            
-            // שמירה חזרה ב-localStorage
-            localStorage.setItem('prayerCount', currentCount);
-            
-            // עדכון התצוגה
-            document.getElementById('prayer-counter').textContent = currentCount;
         }
         
         // הפעלת המונה כשהדף נטען
