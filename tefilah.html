@@ -148,7 +148,15 @@
     <div class="stars" id="stars"></div>
     
     <div class="container">
-        <div class="header">
+        <div class="header" style="position: relative;">
+            <div style="position: absolute; left: 0; top: 0; background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 10px; text-align: center; min-width: 120px;">
+                <div style="font-size: 1.1em; color: #1e3c72; font-weight: bold; margin-bottom: 5px;">📊 מחשבון</div>
+                <div style="font-size: 1.3em; color: #333; font-weight: bold;">
+                    <span id="prayer-counter">0</span>
+                </div>
+                <div style="font-size: 0.8em; color: #666;">קראו את התפילה</div>
+            </div>
+            
             <div style="font-size: 1.1em; color: #666; margin-bottom: 15px;">
                 <strong>בית הכנסת "מנין שאמי" - צעירי תימן - פסגות E</strong><br>
                 <div style="margin-top: 8px; font-size: 0.95em;">
@@ -300,16 +308,6 @@
         </div>
         
         <button class="amen-button" onclick="sayAmen()">אָמֵן!</button>
-        
-        <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(212, 175, 55, 0.1); border-radius: 10px;">
-            <h3 style="color: #1e3c72; margin: 0 0 10px 0;">📊 מחשבון תפילות</h3>
-            <div style="font-size: 1.3em; color: #333;">
-                <span id="prayer-counter">0</span> אנשים קראו את התפילה
-            </div>
-            <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
-                כל ביקור = תפילה חדשה 🙏
-            </div>
-        </div>
         
         <div class="decoration">✦ ✧ ✦</div>
         
