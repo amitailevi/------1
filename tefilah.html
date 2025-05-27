@@ -373,11 +373,17 @@
         // הפעלת הכוכבים
         createStars();
         
-        // מונה תפילות פשוט וגלובלי שעובד לכולם!
+        // מונה תפילות - איפוס מלא ומתחיל מחדש!
         async function updatePrayerCounter() {
             try {
-                // שליחת בקשה לשירות מונה פשוט
-                const response = await fetch('https://api.countapi.xyz/hit/amitailevi-tefilah/prayers');
+                // איפוס כל המטמון הישן
+                localStorage.removeItem('prayerCount');
+                localStorage.removeItem('localPrayerCount'); 
+                localStorage.removeItem('globalPrayerCount');
+                
+                // מונה חדש עם זמן נוכחי למניעת מטמון
+                const timestamp = new Date().getTime();
+                const response = await fetch(`https://api.countapi.xyz/hit/tefilah-new-${timestamp}/prayers-count`);
                 
                 if (response.ok) {
                     const data = await response.json();
@@ -387,16 +393,33 @@
                 }
                 
             } catch (error) {
-                // גיבוי עם מונה מקומי שנשמר
-                let localCount = localStorage.getItem('globalPrayerCount') || 0;
-                localCount = parseInt(localCount) + 1;
-                localStorage.setItem('globalPrayerCount', localCount);
-                document.getElementById('prayer-counter').textContent = localCount;
+                // מונה פשוט שמתחיל מ-1
+                const now = new Date().getTime();
+                let simpleCount = localStorage.getItem('freshCounter') || 0;
+                simpleCount = parseInt(simpleCount) + 1;
+                localStorage.setItem('freshCounter', simpleCount);
+                document.getElementById('prayer-counter').textContent = simpleCount;
             }
         }
+        
+        // ניקוי מלא של מטמון דפדפן וזיכרון
+        function clearAllCache() {
+            // איפוס כל הזיכרון המקומי
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // הוספת פרמטר אקראי לכתובת למניעת מטמון
+            const url = new URL(window.location);
+            url.searchParams.set('v', new Date().getTime());
+            window.history.replaceState({}, '', url);
+        }
+        
+        // ניקוי מטמון בטעינת הדף
+        clearAllCache();
         
         // הפעלת המונה כשהדף נטען
         updatePrayerCounter();
     </script>
 </body>
+</html> 
 </html> 
