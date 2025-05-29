@@ -439,60 +439,23 @@
         // הפעלת הכוכבים
         createStars();
         
-        // מונה תפילות - רק כשלוחצים על הקישור!
-        async function updatePrayerCounter() {
+        // פונקציה להצגת המונה הנוכחי
+        async function displayCurrentCount() {
             try {
-                // בדיקה אם הגיעו מקישור (referrer)
-                const cameFromLink = document.referrer !== '' || window.location.hash === '#counted';
-                
-                if (!cameFromLink) {
-                    // אם לא הגיעו מקישור, רק להציג את המספר הנוכחי
-                    const response = await fetch('https://api.countapi.xyz/get/tefilah-global/clicks');
-                    if (response.ok) {
-                        const data = await response.json();
-                        let displayCount = data.value + 18; // מתחיל מ-18
-                        document.getElementById('prayer-counter').textContent = displayCount;
-                    } else {
-                        // ברירת מחדל
-                        document.getElementById('prayer-counter').textContent = '18';
-                    }
-                    return;
-                }
-                
-                // אם הגיעו מקישור - נספור!
-                const response = await fetch('https://api.countapi.xyz/hit/tefilah-global/clicks');
-                
+                const response = await fetch('https://api.countapi.xyz/get/tefilah-global/clicks');
                 if (response.ok) {
                     const data = await response.json();
-                    let finalCount = data.value + 18; // מתחיל מ-18
-                    document.getElementById('prayer-counter').textContent = finalCount;
+                    let displayCount = data.value + 18; // מתחיל מ-18
+                    document.getElementById('prayer-counter').textContent = displayCount;
                 } else {
-                    throw new Error('Network error');
+                    // ברירת מחדל
+                    document.getElementById('prayer-counter').textContent = '18';
                 }
-                
             } catch (error) {
-                // מונה מקומי פשוט
-                let localCount = localStorage.getItem('linkClicks') || 18;
-                localCount = parseInt(localCount) + 1;
-                localStorage.setItem('linkClicks', localCount);
-                document.getElementById('prayer-counter').textContent = localCount;
+                // אם יש בעיה, להציג 18
+                document.getElementById('prayer-counter').textContent = '18';
             }
         }
-        
-        // ניקוי מלא של מטמון דפדפן וזיכרון
-        function clearAllCache() {
-            // איפוס כל הזיכרון המקומי
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            // הוספת פרמטר אקראי לכתובת למניעת מטמון
-            const url = new URL(window.location);
-            url.searchParams.set('v', new Date().getTime());
-            window.history.replaceState({}, '', url);
-        }
-        
-        // ניקוי מטמון בטעינת הדף
-        clearAllCache();
         
         // פונקציה לספירה כשלוחצים על הכפתור
         async function countMe() {
@@ -515,20 +478,16 @@
                     }, 3000);
                     
                 } else {
-                    throw new Error('Network error');
+                    alert('שגיאה בחיבור לשרת. נסה שוב מאוחר יותר.');
                 }
                 
             } catch (error) {
-                // מונה מקומי פשוט
-                let localCount = localStorage.getItem('linkClicks') || 18;
-                localCount = parseInt(localCount) + 1;
-                localStorage.setItem('linkClicks', localCount);
-                document.getElementById('prayer-counter').textContent = localCount;
+                alert('שגיאה בחיבור לאינטרנט. בדוק את החיבור ונסה שוב.');
             }
         }
         
-        // הפעלת המונה כשהדף נטען (רק להצגה)
-        updatePrayerCounter();
+        // הצגת המונה כשהדף נטען
+        displayCurrentCount();
     </script>
 </body>
 </html> 
