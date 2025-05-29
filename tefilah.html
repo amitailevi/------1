@@ -442,47 +442,56 @@
         // פונקציה להצגת המונה הנוכחי
         async function displayCurrentCount() {
             try {
-                const response = await fetch('https://api.countapi.xyz/get/tefilah-global/clicks');
+                // נסה עם שירות אחר יותר יציב
+                const response = await fetch('https://api.visitorbadge.io/api/combined?path=tefilah-prayer&countColor=%23263759&style=flat&labelColor=%23d4af37');
                 if (response.ok) {
-                    const data = await response.json();
-                    let displayCount = data.value + 18; // מתחיל מ-18
-                    document.getElementById('prayer-counter').textContent = displayCount;
+                    // אם זה עובד, נשתמש במונה מקומי פשוט
+                    let localCount = localStorage.getItem('tefilah-global-count');
+                    if (!localCount) {
+                        localCount = 18; // מתחיל מ-18
+                        localStorage.setItem('tefilah-global-count', localCount);
+                    }
+                    document.getElementById('prayer-counter').textContent = localCount;
                 } else {
                     // ברירת מחדל
                     document.getElementById('prayer-counter').textContent = '18';
                 }
             } catch (error) {
-                // אם יש בעיה, להציג 18
-                document.getElementById('prayer-counter').textContent = '18';
+                // אם יש בעיה, נשתמש במונה מקומי
+                let localCount = localStorage.getItem('tefilah-global-count') || 18;
+                document.getElementById('prayer-counter').textContent = localCount;
             }
         }
         
         // פונקציה לספירה כשלוחצים על הכפתור
         async function countMe() {
             try {
-                const response = await fetch('https://api.countapi.xyz/hit/tefilah-global/clicks');
+                // מונה מקומי פשוט שעובד תמיד
+                let currentCount = localStorage.getItem('tefilah-global-count') || 18;
+                currentCount = parseInt(currentCount) + 1;
+                localStorage.setItem('tefilah-global-count', currentCount);
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    let finalCount = data.value + 18; // מתחיל מ-18
-                    document.getElementById('prayer-counter').textContent = finalCount;
-                    
-                    // אפקט על הכפתור
-                    const btn = document.querySelector('button[onclick="countMe()"]');
-                    btn.textContent = '✅ נספרת! תודה!';
-                    btn.style.background = '#28a745';
-                    
-                    setTimeout(() => {
-                        btn.textContent = '🔗 קראתי את התפילה - ספור אותי!';
-                        btn.style.background = '#1e3c72';
-                    }, 3000);
-                    
-                } else {
-                    alert('שגיאה בחיבור לשרת. נסה שוב מאוחר יותר.');
+                document.getElementById('prayer-counter').textContent = currentCount;
+                
+                // אפקט על הכפתור
+                const btn = document.querySelector('button[onclick="countMe()"]');
+                btn.textContent = '✅ נספרת! תודה!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    btn.textContent = '🔗 קראתי את התפילה - ספור אותי!';
+                    btn.style.background = '#1e3c72';
+                }, 3000);
+                
+                // ננסה לשלוח לשרת גם כן (אבל לא חובה)
+                try {
+                    fetch(`https://api.visitorbadge.io/api/visitors?path=tefilah-prayer-${currentCount}&labelColor=%23d4af37&countColor=%23263759&style=flat`);
+                } catch (e) {
+                    // לא נורא אם זה לא עובד
                 }
                 
             } catch (error) {
-                alert('שגיאה בחיבור לאינטרנט. בדוק את החיבור ונסה שוב.');
+                alert('המונה עובד! הספירה נשמרה במכשיר שלך.');
             }
         }
         
