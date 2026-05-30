@@ -16,7 +16,25 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   loadShabbatTimes();
+  initReveal();
 });
+
+// אנימציית חשיפה עדינה בעת גלילה
+function initReveal() {
+  const items = document.querySelectorAll('.card, .section-title, .shabbat-box, .prose');
+  items.forEach(function (el) { el.classList.add('reveal'); });
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  const obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  items.forEach(function (el) { obs.observe(el); });
+}
 
 /* ===== זמני כניסת ויציאת שבת לראש העין (Hebcal API) ===== */
 async function loadShabbatTimes() {
