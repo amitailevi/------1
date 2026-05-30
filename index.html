@@ -1,89 +1,158 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ניסוי 1 - האתר שלי</title>
-    <style>
-        body {
-            font-family: Arial, Hebrew;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        h1 {
-            color: #333;
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-        
-        .welcome {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            border-right: 5px solid #007bff;
-            margin: 20px 0;
-        }
-        
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        button:hover {
-            background: #0056b3;
-            transform: scale(1.05);
-        }
-        
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            background: #d4edda;
-            border-radius: 8px;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>כולל הרש"ש ראש העין | עמותה לתורה ומורשת יהדות תימן</title>
+  <meta name="description" content="עמותת כולל הרש&quot;ש ראש העין - חדשות יהדות, מידע על בתי כנסת ומקוואות, תורת הרש&quot;ש הקדוש, מורשת יהדות תימן וזמני כניסת ויציאת שבת בראש העין.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 האתר שלי עובד שוב!</h1>
-        
-        <div class="welcome">
-            <h2>ברוך הבא לניסוי שלך!</h2>
-            <p>תיקנו את הקובץ! הכל עובד מצוין שוב! 🎉</p>
-        </div>
-        
-        <button onclick="showMessage()">לחץ כאן לבדיקה!</button>
-        
-        <div id="result">
-            <h3>מעולה! הכפתור עובד! ✨</h3>
-            <p>עכשיו תוכל להתחיל לבנות את האתר שלך...</p>
-        </div>
-    </div>
 
-    <script>
-        function showMessage() {
-            document.getElementById('result').style.display = 'block';
-            document.querySelector('button').textContent = 'עבד מצוין! 🎯';
-        }
-    </script>
+  <!-- ניווט -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="logo">ש</span>
+        <div>
+          <b>כולל הרש"ש</b><br>
+          <span>ראש העין</span>
+        </div>
+      </a>
+      <button class="nav-toggle" onclick="toggleMenu()" aria-label="תפריט">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">בית</a></li>
+        <li><a href="news.html">חדשות</a></li>
+        <li><a href="judaism.html">יהדות בראש העין</a></li>
+        <li><a href="rashash.html">הרש"ש הקדוש</a></li>
+        <li><a href="teimanim.html">יהדות תימן</a></li>
+        <li><a href="about.html">אודות העמותה</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- כותרת ראשית -->
+  <section class="hero">
+    <div class="container">
+      <div class="crown">👑</div>
+      <div class="sub">עמותת כולל הרש"ש ראש העין</div>
+      <h1>תורה, קהילה ומורשת יהדות תימן</h1>
+      <p class="lead">בית של תורה בלב ראש העין — ממשיכים את דרכם של רבותינו, מנחילים את תורת הרש"ש הקדוש ושומרים על מורשת יהדות תימן לדורות הבאים.</p>
+      <a class="btn" href="about.html">על העמותה</a>
+      <a class="btn ghost" href="#shabbat">זמני שבת</a>
+    </div>
+  </section>
+
+  <!-- זמני שבת -->
+  <section class="section" id="shabbat">
+    <div class="container">
+      <div class="section-title">
+        <h2>זמני כניסת ויציאת השבת</h2>
+        <p>לפי מיקום ראש העין · מתעדכן אוטומטית מדי שבוע</p>
+      </div>
+      <div class="shabbat-box">
+        <h3>שבת קודש</h3>
+        <div class="parasha">פרשת <span id="shabbatParasha">…</span></div>
+        <div class="shabbat-times" id="shabbatTimes">
+          <p>טוען זמנים…</p>
+        </div>
+        <div class="shabbat-note">הדלקת נרות 30 דק' לפני השקיעה · צאת השבת לפי צאת הכוכבים. נא לאמת מול לוח הזמנים של בית הכנסת.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- מה אנחנו מציעים -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-title">
+        <h2>מה תמצאו באתר</h2>
+        <p>הכל על חיי היהדות בראש העין במקום אחד</p>
+      </div>
+      <div class="grid">
+        <a class="card" href="news.html">
+          <div class="ico">📰</div>
+          <h3>חדשות היהדות</h3>
+          <p>עדכונים, שיעורים, אירועים והודעות מקהילות ראש העין.</p>
+        </a>
+        <a class="card" href="judaism.html">
+          <div class="ico">🕍</div>
+          <h3>בתי כנסת ומקוואות</h3>
+          <p>מדריך לבתי הכנסת, המקוואות ומוסדות התורה בעיר.</p>
+        </a>
+        <a class="card" href="rashash.html">
+          <div class="ico">📜</div>
+          <h3>הרש"ש הקדוש</h3>
+          <p>על רבי שלום שרעבי זצ"ל, תורתו, סידורו וחידושי חז"ל.</p>
+        </a>
+        <a class="card" href="teimanim.html">
+          <div class="ico">🕎</div>
+          <h3>מורשת יהדות תימן</h3>
+          <p>היסטוריה ואקטואליה של הקהילה התימנית בראש העין.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- הצצה לחדשות -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>חדשות אחרונות</h2>
+        <p>מה חדש בקהילה</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="meta">שיעור שבועי</div>
+          <h3>שיעור בתורת הרש"ש</h3>
+          <p>מדי יום שלישי בערב, שיעור עיון בכוונות ובסידור הרש"ש בבית הכולל. הציבור מוזמן.</p>
+        </div>
+        <div class="card">
+          <div class="meta">אירוע קהילתי</div>
+          <h3>סעודת הילולא</h3>
+          <p>סעודת הודיה ולימוד לזכר צדיקי הקהילה, בהשתתפות רבני העיר ובני הקהילה.</p>
+        </div>
+        <div class="card">
+          <div class="meta">הודעה</div>
+          <h3>זמני תפילות בימי החול</h3>
+          <p>שחרית, מנחה וערבית במניינים קבועים. לפרטים ולוח הזמנים המלא — עמוד "יהדות בראש העין".</p>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:28px;">
+        <a class="btn" href="news.html">לכל החדשות</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- כותרת תחתונה -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>כולל הרש"ש ראש העין</h4>
+          <p>עמותה לתורה, חסד ומורשת יהדות תימן בעיר ראש העין.</p>
+        </div>
+        <div>
+          <h4>ניווט</h4>
+          <a href="news.html">חדשות</a>
+          <a href="judaism.html">יהדות בראש העין</a>
+          <a href="rashash.html">הרש"ש הקדוש</a>
+          <a href="teimanim.html">יהדות תימן</a>
+        </div>
+        <div>
+          <h4>צור קשר</h4>
+          <a href="about.html">פרטי העמותה</a>
+          <p>ראש העין</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © <span id="year"></span> עמותת כולל הרש"ש ראש העין · כל הזכויות שמורות
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
-</html> 
+</html>

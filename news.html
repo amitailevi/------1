@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>חדשות יהדות בראש העין | כולל הרש"ש</title>
+  <meta name="description" content="חדשות, עדכונים ואירועים מקהילות היהדות בראש העין - שיעורים, הילולות, מניינים ואירועי קהילה.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="logo">ש</span>
+        <div><b>כולל הרש"ש</b><br><span>ראש העין</span></div>
+      </a>
+      <button class="nav-toggle" onclick="toggleMenu()" aria-label="תפריט">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">בית</a></li>
+        <li><a href="news.html">חדשות</a></li>
+        <li><a href="judaism.html">יהדות בראש העין</a></li>
+        <li><a href="rashash.html">הרש"ש הקדוש</a></li>
+        <li><a href="teimanim.html">יהדות תימן</a></li>
+        <li><a href="about.html">אודות העמותה</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-head">
+    <div class="container">
+      <h1>📰 חדשות יהדות בראש העין</h1>
+      <p>עדכונים, שיעורים ואירועים מקהילות העיר</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid">
+        <article class="card">
+          <div class="meta">שיעורים · קבוע</div>
+          <h3>שיעור שבועי בתורת הרש"ש</h3>
+          <p>שיעור עיון בכוונות ובסידור הרש"ש הקדוש מתקיים מדי שבוע בבית הכולל. השיעור פתוח לכל הציבור, ומתאים גם למתחילים.</p>
+        </article>
+        <article class="card">
+          <div class="meta">אירוע · קהילה</div>
+          <h3>סעודת הילולא ולימוד</h3>
+          <p>סעודת הודיה ולימוד לזכר צדיקי וחכמי הקהילה, בהשתתפות רבני העיר ובני הקהילה. הזמן והמקום יפורסמו בהמשך.</p>
+        </article>
+        <article class="card">
+          <div class="meta">תפילות · הודעה</div>
+          <h3>לוח מניינים מעודכן</h3>
+          <p>מניינים קבועים לשחרית, מנחה וערבית בנוסח תימן (בלאדי/שאמי). לפרטים המלאים ראו עמוד "יהדות בראש העין".</p>
+        </article>
+        <article class="card">
+          <div class="meta">חינוך · נוער</div>
+          <h3>מפעל "אבות ובנים"</h3>
+          <p>לימוד משותף של אבות וילדים בערבי שבת, לחיזוק הקשר בין הדורות ולאהבת התורה. כיבוד והגרלות לילדים.</p>
+        </article>
+        <article class="card">
+          <div class="meta">חסד</div>
+          <h3>קופת החסד הקהילתית</h3>
+          <p>סיוע למשפחות נזקקות בעיר — חבילות מזון לקראת החגים ותמיכה שוטפת. ניתן לתרום ולהיעזר דרך העמותה.</p>
+        </article>
+        <article class="card">
+          <div class="meta">מורשת</div>
+          <h3>ערב מורשת יהדות תימן</h3>
+          <p>ערב שירה, פיוט וסיפורי עלייה לרגל שימור מורשת הקהילה התימנית בראש העין. לפרטים — עמוד "יהדות תימן".</p>
+        </article>
+      </div>
+
+      <div class="prose" style="margin-top:40px; text-align:center;">
+        <blockquote>רוצים לפרסם חדשה, שיעור או אירוע קהילתי? פנו אלינו דרך עמוד <a href="about.html">אודות העמותה</a> ונשמח לעדכן את הלוח.</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">© <span id="year"></span> עמותת כולל הרש"ש ראש העין · כל הזכויות שמורות</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
