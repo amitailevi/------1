@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>בתי כנסת | מערכת ניהול ראש העין</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1 class="gold-text">ניהול בתי כנסת</h1>
+      <p>רשימת בתי הכנסת בעיר — נוסח, מיקום, רבנים, גבאים וזמני תפילה</p>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>בתי כנסת (<span id="count">0</span>)</h2>
+          <div class="toolbar">
+            <input type="text" id="search" class="search-input" placeholder="חיפוש לפי שם / שכונה / נוסח…" oninput="render()">
+            <button class="btn" onclick="openForm()">＋ בית כנסת חדש</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>שם בית הכנסת</th><th>נוסח</th><th>שכונה</th>
+                <th>רב / גבאי</th><th>שחרית</th><th>מנחה</th><th>ערבית</th><th>פעולות</th>
+              </tr>
+            </thead>
+            <tbody id="body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- מודאל טופס -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <h3 id="modalTitle">בית כנסת חדש</h3>
+      <form id="form" onsubmit="save(event)">
+        <input type="hidden" id="f_id">
+        <div class="form-grid">
+          <div class="field full">
+            <label>שם בית הכנסת *</label>
+            <input type="text" id="f_name" required>
+          </div>
+          <div class="field">
+            <label>נוסח</label>
+            <select id="f_nusach">
+              <option value="">— בחר —</option>
+              <option>תימן - בלאדי</option>
+              <option>תימן - שאמי</option>
+              <option>ספרד</option>
+              <option>אשכנז</option>
+              <option>עדות המזרח</option>
+              <option>חב"ד</option>
+              <option>אחר</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>שכונה</label>
+            <input type="text" id="f_neighborhood">
+          </div>
+          <div class="field full">
+            <label>כתובת</label>
+            <input type="text" id="f_address">
+          </div>
+          <div class="field">
+            <label>רב</label>
+            <input type="text" id="f_rabbi">
+          </div>
+          <div class="field">
+            <label>גבאי</label>
+            <input type="text" id="f_gabbai">
+          </div>
+          <div class="field">
+            <label>טלפון</label>
+            <input type="tel" id="f_phone" dir="ltr" style="text-align:right">
+          </div>
+          <div class="field">
+            <label>שחרית</label>
+            <input type="time" id="f_shacharit">
+          </div>
+          <div class="field">
+            <label>מנחה</label>
+            <input type="time" id="f_mincha">
+          </div>
+          <div class="field">
+            <label>ערבית</label>
+            <input type="time" id="f_arvit">
+          </div>
+          <div class="field full">
+            <label>הערות</label>
+            <textarea id="f_notes"></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="submit" class="btn">שמירה</button>
+          <button type="button" class="btn ghost" onclick="closeModal('modal')">ביטול</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-note">© <span id="year"></span> מערכת ניהול בתי כנסת ראש העין</div>
+
+  <script src="db.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    renderNav('syn');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function render() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      let list = DB.synagogues.all();
+      if (q) {
+        list = list.filter(s =>
+          [s.name, s.neighborhood, s.nusach, s.rabbi, s.gabbai]
+            .some(v => (v || '').toLowerCase().includes(q)));
+      }
+      list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'he'));
+      document.getElementById('count').textContent = list.length;
+
+      const body = document.getElementById('body');
+      if (!list.length) {
+        body.innerHTML = `<tr><td colspan="8" class="empty">לא נמצאו בתי כנסת. לחצו "בית כנסת חדש" כדי להוסיף.</td></tr>`;
+        return;
+      }
+      body.innerHTML = list.map(s => `
+        <tr>
+          <td><b>${esc(s.name)}</b>${s.address ? `<br><small style="color:var(--muted)">${esc(s.address)}</small>` : ''}</td>
+          <td>${s.nusach ? `<span class="tag">${esc(s.nusach)}</span>` : '—'}</td>
+          <td>${esc(s.neighborhood) || '—'}</td>
+          <td>${esc(s.rabbi) || '—'}${s.gabbai ? `<br><small style="color:var(--muted)">גבאי: ${esc(s.gabbai)}</small>` : ''}</td>
+          <td>${esc(s.shacharit) || '—'}</td>
+          <td>${esc(s.mincha) || '—'}</td>
+          <td>${esc(s.arvit) || '—'}</td>
+          <td class="row-actions">
+            <button class="btn sm ghost" onclick="openForm('${s.id}')">עריכה</button>
+            <button class="btn sm danger" onclick="del('${s.id}')">מחיקה</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    function openForm(id) {
+      const f = id ? DB.synagogues.get(id) : {};
+      document.getElementById('modalTitle').textContent = id ? 'עריכת בית כנסת' : 'בית כנסת חדש';
+      document.getElementById('f_id').value = f.id || '';
+      document.getElementById('f_name').value = f.name || '';
+      document.getElementById('f_nusach').value = f.nusach || '';
+      document.getElementById('f_neighborhood').value = f.neighborhood || '';
+      document.getElementById('f_address').value = f.address || '';
+      document.getElementById('f_rabbi').value = f.rabbi || '';
+      document.getElementById('f_gabbai').value = f.gabbai || '';
+      document.getElementById('f_phone').value = f.phone || '';
+      document.getElementById('f_shacharit').value = f.shacharit || '';
+      document.getElementById('f_mincha').value = f.mincha || '';
+      document.getElementById('f_arvit').value = f.arvit || '';
+      document.getElementById('f_notes').value = f.notes || '';
+      openModal('modal');
+    }
+
+    function save(e) {
+      e.preventDefault();
+      DB.synagogues.save({
+        id: document.getElementById('f_id').value || undefined,
+        name: document.getElementById('f_name').value.trim(),
+        nusach: document.getElementById('f_nusach').value,
+        neighborhood: document.getElementById('f_neighborhood').value.trim(),
+        address: document.getElementById('f_address').value.trim(),
+        rabbi: document.getElementById('f_rabbi').value.trim(),
+        gabbai: document.getElementById('f_gabbai').value.trim(),
+        phone: document.getElementById('f_phone').value.trim(),
+        shacharit: document.getElementById('f_shacharit').value,
+        mincha: document.getElementById('f_mincha').value,
+        arvit: document.getElementById('f_arvit').value,
+        notes: document.getElementById('f_notes').value.trim(),
+      });
+      closeModal('modal');
+      toast('בית הכנסת נשמר');
+      render();
+    }
+
+    function del(id) {
+      const s = DB.synagogues.get(id);
+      if (confirm(`למחוק את "${s ? s.name : ''}"? התרומות הקשורות יישמרו אך ינותקו מהשיוך.`)) {
+        DB.synagogues.remove(id);
+        toast('בית הכנסת נמחק');
+        render();
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

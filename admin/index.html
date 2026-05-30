@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>דשבורד | מערכת ניהול בתי כנסת ראש העין</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1 class="gold-text">דשבורד ניהול</h1>
+      <p>מבט-על על בתי הכנסת והתרומות · ראש העין</p>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+      <div class="stats" id="stats"></div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>תרומות אחרונות</h2>
+          <a class="btn sm" href="donations.html">לכל התרומות ←</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>תאריך</th><th>תורם</th><th>בית כנסת</th><th>ייעוד</th><th>סכום</th></tr></thead>
+            <tbody id="recentBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>גיבוי ושחזור נתונים</h2>
+        </div>
+        <p style="color:var(--muted); margin-bottom:14px; font-size:.9rem;">
+          הנתונים נשמרים בדפדפן זה. מומלץ לייצא גיבוי מדי פעם ולשמור את הקובץ.
+        </p>
+        <div class="toolbar">
+          <button class="btn" onclick="doExport()">⬇ ייצוא גיבוי (JSON)</button>
+          <button class="btn ghost" onclick="document.getElementById('importFile').click()">⬆ ייבוא גיבוי</button>
+          <input type="file" id="importFile" accept="application/json" style="display:none" onchange="doImport(this)">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="footer-note">© <span id="year"></span> מערכת ניהול בתי כנסת ראש העין</div>
+
+  <script src="db.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    renderNav('home');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function synName(id) {
+      const s = DB.synagogues.get(id);
+      return s ? s.name : '—';
+    }
+
+    function render() {
+      const syn = DB.synagogues.all();
+      const don = DB.donations.all();
+      const now = new Date();
+      const monthKey = now.toISOString().slice(0, 7);
+      const yearKey = now.getFullYear().toString();
+
+      const monthTotal = don.filter(d => (d.date || '').startsWith(monthKey))
+        .reduce((s, d) => s + Number(d.amount || 0), 0);
+      const yearTotal = don.filter(d => (d.date || '').startsWith(yearKey))
+        .reduce((s, d) => s + Number(d.amount || 0), 0);
+
+      document.getElementById('stats').innerHTML = `
+        <div class="stat"><div class="ico">🕍</div><div class="label">בתי כנסת רשומים</div><div class="num">${syn.length}</div></div>
+        <div class="stat"><div class="ico">📅</div><div class="label">תרומות החודש</div><div class="num">${ils(monthTotal)}</div></div>
+        <div class="stat"><div class="ico">📈</div><div class="label">תרומות השנה</div><div class="num">${ils(yearTotal)}</div></div>
+        <div class="stat"><div class="ico">🧾</div><div class="label">סך רשומות תרומה</div><div class="num">${don.length}</div></div>`;
+
+      const recent = [...don].sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 6);
+      const body = document.getElementById('recentBody');
+      if (!recent.length) {
+        body.innerHTML = `<tr><td colspan="5" class="empty">אין עדיין תרומות. אפשר להוסיף במסך "תרומות וכספים".</td></tr>`;
+        return;
+      }
+      body.innerHTML = recent.map(d => `
+        <tr>
+          <td>${esc(d.date) || '—'}</td>
+          <td>${esc(d.donor) || '—'}</td>
+          <td>${esc(synName(d.synagogueId))}</td>
+          <td>${esc(d.purpose) || '—'}</td>
+          <td class="amount">${ils(d.amount)}</td>
+        </tr>`).join('');
+    }
+
+    function doExport() {
+      const blob = new Blob([DB.exportAll()], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'roshhaayin-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+      toast('הגיבוי יוצא בהצלחה');
+    }
+
+    function doImport(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (!confirm('הייבוא יחליף את כל הנתונים הקיימים. להמשיך?')) { input.value = ''; return; }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { DB.importAll(reader.result); toast('הנתונים יובאו בהצלחה'); render(); }
+        catch (e) { alert('קובץ לא תקין'); }
+        input.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    render();
+  </script>
+</body>
+</html>

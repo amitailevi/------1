@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>תרומות וכספים | מערכת ניהול ראש העין</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <div class="page-head">
+    <div class="container">
+      <h1 class="gold-text">תרומות וכספים</h1>
+      <p>רישום תרומות, סינון לפי בית כנסת ותקופה, וסיכומים כספיים</p>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+      <div class="stats" id="stats"></div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>רשומות תרומה (<span id="count">0</span>)</h2>
+          <div class="toolbar">
+            <select id="fSyn" class="search-input" onchange="render()"></select>
+            <input type="month" id="fMonth" class="search-input" onchange="render()">
+            <button class="btn ghost sm" onclick="clearFilters()">נקה סינון</button>
+            <button class="btn ghost sm" onclick="exportCsv()">⬇ CSV</button>
+            <button class="btn" onclick="openForm()">＋ תרומה חדשה</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>תאריך</th><th>תורם</th><th>בית כנסת</th><th>ייעוד</th>
+                <th>אמצעי</th><th>קבלה</th><th>סכום</th><th>פעולות</th>
+              </tr>
+            </thead>
+            <tbody id="body"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6" style="text-align:left; color:var(--muted)">סה"כ בסינון הנוכחי</td>
+                <td class="amount" id="sumCell">₪0</td><td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- מודאל טופס -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <h3 id="modalTitle">תרומה חדשה</h3>
+      <form id="form" onsubmit="save(event)">
+        <input type="hidden" id="f_id">
+        <div class="form-grid">
+          <div class="field">
+            <label>שם התורם *</label>
+            <input type="text" id="f_donor" required>
+          </div>
+          <div class="field">
+            <label>סכום (₪) *</label>
+            <input type="number" id="f_amount" min="0" step="0.01" required>
+          </div>
+          <div class="field">
+            <label>בית כנסת</label>
+            <select id="f_syn"></select>
+          </div>
+          <div class="field">
+            <label>תאריך *</label>
+            <input type="date" id="f_date" required>
+          </div>
+          <div class="field">
+            <label>ייעוד</label>
+            <input type="text" id="f_purpose" placeholder="אחזקה / קופת חסד / ספר תורה…">
+          </div>
+          <div class="field">
+            <label>אמצעי תשלום</label>
+            <select id="f_method">
+              <option>מזומן</option>
+              <option>העברה בנקאית</option>
+              <option>צ'ק</option>
+              <option>כרטיס אשראי</option>
+              <option>הוראת קבע</option>
+              <option>ביט / אפליקציה</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>מספר קבלה</label>
+            <input type="text" id="f_receipt">
+          </div>
+          <div class="field full">
+            <label>הערות</label>
+            <textarea id="f_notes"></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="submit" class="btn">שמירה</button>
+          <button type="button" class="btn ghost" onclick="closeModal('modal')">ביטול</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-note">© <span id="year"></span> מערכת ניהול בתי כנסת ראש העין</div>
+
+  <script src="db.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    renderNav('don');
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function synName(id) {
+      const s = DB.synagogues.get(id);
+      return s ? s.name : '';
+    }
+
+    // מילוי רשימות בתי הכנסת (סינון + טופס)
+    function fillSynOptions() {
+      const syns = DB.synagogues.all().sort((a, b) => (a.name || '').localeCompare(b.name || '', 'he'));
+      const opts = syns.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+      document.getElementById('fSyn').innerHTML = `<option value="">כל בתי הכנסת</option>` + opts;
+      document.getElementById('f_syn').innerHTML = `<option value="">— ללא שיוך —</option>` + opts;
+    }
+
+    function getFiltered() {
+      const synId = document.getElementById('fSyn').value;
+      const month = document.getElementById('fMonth').value; // YYYY-MM
+      return DB.donations.all().filter(d => {
+        if (synId && d.synagogueId !== synId) return false;
+        if (month && !(d.date || '').startsWith(month)) return false;
+        return true;
+      }).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    }
+
+    function render() {
+      const list = getFiltered();
+      document.getElementById('count').textContent = list.length;
+      const sum = list.reduce((s, d) => s + Number(d.amount || 0), 0);
+      document.getElementById('sumCell').textContent = ils(sum);
+
+      // כרטיסי סיכום (כלל הנתונים, ללא סינון)
+      const all = DB.donations.all();
+      const now = new Date();
+      const mKey = now.toISOString().slice(0, 7);
+      const yKey = now.getFullYear().toString();
+      const mSum = all.filter(d => (d.date || '').startsWith(mKey)).reduce((s, d) => s + Number(d.amount || 0), 0);
+      const ySum = all.filter(d => (d.date || '').startsWith(yKey)).reduce((s, d) => s + Number(d.amount || 0), 0);
+      const total = all.reduce((s, d) => s + Number(d.amount || 0), 0);
+      document.getElementById('stats').innerHTML = `
+        <div class="stat"><div class="ico">📅</div><div class="label">סך החודש</div><div class="num">${ils(mSum)}</div></div>
+        <div class="stat"><div class="ico">📈</div><div class="label">סך השנה</div><div class="num">${ils(ySum)}</div></div>
+        <div class="stat"><div class="ico">💰</div><div class="label">סך כל הזמנים</div><div class="num">${ils(total)}</div></div>
+        <div class="stat"><div class="ico">🧾</div><div class="label">מס' רשומות</div><div class="num">${all.length}</div></div>`;
+
+      const body = document.getElementById('body');
+      if (!list.length) {
+        body.innerHTML = `<tr><td colspan="8" class="empty">אין רשומות תואמות. לחצו "תרומה חדשה" כדי להוסיף.</td></tr>`;
+        return;
+      }
+      body.innerHTML = list.map(d => `
+        <tr>
+          <td>${esc(d.date) || '—'}</td>
+          <td><b>${esc(d.donor) || '—'}</b></td>
+          <td>${esc(synName(d.synagogueId)) || '<span style="color:var(--muted)">—</span>'}</td>
+          <td>${esc(d.purpose) || '—'}</td>
+          <td>${d.method ? `<span class="tag">${esc(d.method)}</span>` : '—'}</td>
+          <td>${esc(d.receipt) || '—'}</td>
+          <td class="amount">${ils(d.amount)}</td>
+          <td class="row-actions">
+            <button class="btn sm ghost" onclick="openForm('${d.id}')">עריכה</button>
+            <button class="btn sm danger" onclick="del('${d.id}')">מחיקה</button>
+          </td>
+        </tr>`).join('');
+    }
+
+    function clearFilters() {
+      document.getElementById('fSyn').value = '';
+      document.getElementById('fMonth').value = '';
+      render();
+    }
+
+    function openForm(id) {
+      const d = id ? DB.donations.get(id) : {};
+      document.getElementById('modalTitle').textContent = id ? 'עריכת תרומה' : 'תרומה חדשה';
+      document.getElementById('f_id').value = d.id || '';
+      document.getElementById('f_donor').value = d.donor || '';
+      document.getElementById('f_amount').value = d.amount != null ? d.amount : '';
+      document.getElementById('f_syn').value = d.synagogueId || '';
+      document.getElementById('f_date').value = d.date || new Date().toISOString().slice(0, 10);
+      document.getElementById('f_purpose').value = d.purpose || '';
+      document.getElementById('f_method').value = d.method || 'מזומן';
+      document.getElementById('f_receipt').value = d.receipt || '';
+      document.getElementById('f_notes').value = d.notes || '';
+      openModal('modal');
+    }
+
+    function save(e) {
+      e.preventDefault();
+      DB.donations.save({
+        id: document.getElementById('f_id').value || undefined,
+        donor: document.getElementById('f_donor').value.trim(),
+        amount: document.getElementById('f_amount').value,
+        synagogueId: document.getElementById('f_syn').value,
+        date: document.getElementById('f_date').value,
+        purpose: document.getElementById('f_purpose').value.trim(),
+        method: document.getElementById('f_method').value,
+        receipt: document.getElementById('f_receipt').value.trim(),
+        notes: document.getElementById('f_notes').value.trim(),
+      });
+      closeModal('modal');
+      toast('התרומה נשמרה');
+      render();
+    }
+
+    function del(id) {
+      if (confirm('למחוק את רשומת התרומה?')) {
+        DB.donations.remove(id);
+        toast('הרשומה נמחקה');
+        render();
+      }
+    }
+
+    function exportCsv() {
+      const list = getFiltered();
+      if (!list.length) { alert('אין רשומות לייצוא'); return; }
+      const headers = ['תאריך', 'תורם', 'בית כנסת', 'ייעוד', 'אמצעי', 'מספר קבלה', 'סכום', 'הערות'];
+      const rows = list.map(d => [
+        d.date, d.donor, synName(d.synagogueId), d.purpose,
+        d.method, d.receipt, d.amount, (d.notes || '').replace(/\n/g, ' '),
+      ].map(v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`).join(','));
+      const csv = '﻿' + [headers.join(','), ...rows].join('\n'); // BOM לעברית באקסל
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'donations-' + new Date().toISOString().slice(0, 10) + '.csv';
+      a.click();
+      toast('הקובץ יוצא');
+    }
+
+    fillSynOptions();
+    render();
+  </script>
+</body>
+</html>

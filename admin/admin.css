@@ -1,0 +1,165 @@
+/* ===== מערכת ניהול — ראש העין | משתמש בערכת הזהב של האתר ===== */
+:root {
+  --bg: #0a0e1c; --bg-2: #0f1530;
+  --gold: #d4af37; --gold-2: #f6e27a; --gold-soft: rgba(212,175,55,.35);
+  --text: #eceadf; --muted: #9aa3bd;
+  --glass: rgba(255,255,255,.045); --glass-brd: rgba(212,175,55,.22);
+  --line: rgba(255,255,255,.08);
+  --radius: 16px;
+  --grad-gold: linear-gradient(120deg,#f6e27a 0%,#d4af37 45%,#b8901f 100%);
+  --ok: #4ade80; --bad: #f87171; --info: #7aa2ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Heebo', Arial, sans-serif; color: var(--text); direction: rtl;
+  line-height: 1.7; min-height: 100vh;
+  background:
+    radial-gradient(900px 600px at 85% -5%, rgba(212,175,55,.10), transparent 60%),
+    radial-gradient(700px 500px at 0% 10%, rgba(60,90,200,.12), transparent 55%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  background-attachment: fixed;
+}
+a { color: inherit; text-decoration: none; }
+h1,h2,h3 { font-family: 'Frank Ruhl Libre','Heebo',serif; }
+.container { width: min(1180px, 94%); margin: 0 auto; }
+.gold-text { background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ===== ניווט ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,14,28,.78); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--glass-brd);
+}
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand .logo {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--grad-gold);
+  display: grid; place-items: center; font-family: 'Frank Ruhl Libre',serif;
+  font-size: 22px; font-weight: 700; color: #1a1305;
+}
+.brand b { font-size: 1.05rem; line-height: 1.1; }
+.brand span { font-size: .72rem; color: var(--gold-2); letter-spacing: 2px; }
+.nav-links { display: flex; gap: 4px; list-style: none; flex-wrap: wrap; align-items: center; }
+.nav-links a {
+  padding: 8px 14px; border-radius: 999px; font-size: .92rem; color: #d9dcea; transition: .2s;
+}
+.nav-links a:hover { color: var(--gold-2); }
+.nav-links a.active { color: #1a1305; font-weight: 700; background: var(--grad-gold); }
+.nav-links a.site-link { color: var(--muted); }
+.nav-toggle { display: none; background: none; border: 0; color: var(--gold-2); font-size: 1.7rem; cursor: pointer; }
+
+/* ===== כותרת עמוד ===== */
+.page-head { padding: 30px 0 18px; }
+.page-head h1 { font-size: clamp(1.7rem,4vw,2.4rem); font-weight: 700; }
+.page-head p { color: var(--muted); margin-top: 4px; }
+main { padding: 10px 0 70px; }
+
+/* ===== כרטיסי סטטיסטיקה ===== */
+.stats { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 18px; margin-bottom: 30px; }
+.stat {
+  background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px; position: relative; overflow: hidden;
+}
+.stat::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(212,175,55,.10), transparent 50%);
+}
+.stat > * { position: relative; }
+.stat .ico { font-size: 1.7rem; margin-bottom: 6px; }
+.stat .label { color: var(--muted); font-size: .9rem; }
+.stat .num { font-family: 'Frank Ruhl Libre',serif; font-size: 2.1rem; font-weight: 800; color: var(--gold-2); }
+
+/* ===== פאנל / כרטיס תוכן ===== */
+.panel {
+  background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px; margin-bottom: 24px;
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+.panel-head h2 { font-size: 1.35rem; color: var(--gold-2); }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* ===== כפתורים ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  background: var(--grad-gold); color: #1a1305; padding: 10px 20px; border: 0;
+  border-radius: 999px; font-weight: 700; font-family: inherit; font-size: .92rem;
+  transition: transform .2s, box-shadow .2s; box-shadow: 0 8px 22px rgba(212,175,55,.25);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(212,175,55,.4); }
+.btn.ghost { background: transparent; color: var(--gold-2); border: 1px solid var(--gold-soft); box-shadow: none; }
+.btn.ghost:hover { background: rgba(212,175,55,.1); }
+.btn.sm { padding: 6px 13px; font-size: .82rem; }
+.btn.danger { background: transparent; color: var(--bad); border: 1px solid rgba(248,113,113,.4); box-shadow: none; }
+.btn.danger:hover { background: rgba(248,113,113,.12); }
+
+/* ===== טבלאות ===== */
+.table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; min-width: 620px; }
+thead th {
+  text-align: right; background: rgba(212,175,55,.08); color: var(--gold-2);
+  font-size: .85rem; padding: 12px 14px; white-space: nowrap; border-bottom: 1px solid var(--glass-brd);
+}
+tbody td { padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: .93rem; color: #d3d7e6; }
+tbody tr:hover { background: rgba(255,255,255,.025); }
+tbody tr:last-child td { border-bottom: 0; }
+.amount { font-weight: 700; color: var(--gold-2); white-space: nowrap; }
+.tag {
+  display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .78rem;
+  background: rgba(122,162,255,.14); color: var(--info); border: 1px solid rgba(122,162,255,.25);
+}
+.row-actions { display: flex; gap: 6px; white-space: nowrap; }
+.empty { text-align: center; color: var(--muted); padding: 30px 14px; }
+
+/* ===== טפסים ===== */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: .86rem; color: var(--muted); margin-bottom: 5px; }
+.field input, .field select, .field textarea {
+  width: 100%; padding: 10px 13px; border-radius: 11px; color: var(--text);
+  background: rgba(10,14,28,.6); border: 1px solid var(--glass-brd);
+  font-family: inherit; font-size: .95rem; color-scheme: dark;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: 1px solid var(--gold-soft); }
+.field textarea { resize: vertical; min-height: 64px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.form-grid .full { grid-column: 1 / -1; }
+.search-input {
+  padding: 9px 14px; border-radius: 999px; min-width: 200px;
+  background: rgba(10,14,28,.6); border: 1px solid var(--glass-brd); color: var(--text);
+  font-family: inherit; font-size: .9rem;
+}
+
+/* ===== חלון מודאלי ===== */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(4,6,14,.72); backdrop-filter: blur(4px);
+  display: none; align-items: flex-start; justify-content: center; z-index: 200; padding: 40px 16px; overflow-y: auto;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: linear-gradient(180deg, #131a36, #0e1429); border: 1px solid var(--glass-brd);
+  border-radius: 18px; width: min(620px, 100%); padding: 26px; box-shadow: 0 30px 70px rgba(0,0,0,.6);
+}
+.modal h3 { color: var(--gold-2); font-size: 1.4rem; margin-bottom: 18px; }
+.modal-foot { display: flex; gap: 10px; justify-content: flex-start; margin-top: 8px; }
+
+/* ===== הודעת toast ===== */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: #131a36; border: 1px solid var(--gold-soft); color: var(--text);
+  padding: 12px 22px; border-radius: 999px; z-index: 300; opacity: 0; transition: .3s;
+  box-shadow: 0 12px 30px rgba(0,0,0,.5);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.footer-note { text-align: center; color: var(--muted); font-size: .82rem; padding: 24px 0; border-top: 1px solid var(--line); }
+
+@media (max-width: 760px) {
+  .nav-toggle { display: block; }
+  .nav-links {
+    position: absolute; top: 70px; right: 0; left: 0; flex-direction: column; gap: 2px;
+    background: rgba(10,14,28,.98); padding: 12px 18px 20px; display: none; border-bottom: 1px solid var(--glass-brd);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { display: block; width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+}
