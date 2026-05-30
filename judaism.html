@@ -48,12 +48,13 @@
     <div class="container">
       <div class="section-title">
         <h2 class="gold-text">רשימת בתי הכנסת</h2>
-        <p>כתובת · גבאי · זמני תפילה · ניווט</p>
+        <p>18 בתי כנסת · נוסח · כתובת · ניווט · זמני תפילה (מקור: המועצה הדתית)</p>
       </div>
       <div class="grid" id="shulsGrid"></div>
       <p style="text-align:center; color:var(--muted); font-size:.88rem; margin-top:24px;">
-        📋 הרשימה לדוגמה וממתינה לנתונים אמיתיים. שלחו לי את רשימת בתי הכנסת (שם, כתובת, נוסח, גבאי, טלפון וזמני תפילה) ואמלא הכל — אפשר עשרות ומאות.
-        <a href="about.html" style="color:var(--techelet)">צרו קשר</a>
+        📋 הנתונים (שם · נוסח · כתובת) מתוך המדריך הרשמי של
+        <a href="https://mdrh.org.il/directory-synagogues/" target="_blank" rel="noopener" style="color:var(--techelet)">המועצה הדתית ראש העין</a>.
+        לזמני תפילה מלאים ופרטי גבאים — לחצו "זמני תפילה" בכל כרטיס. נמצאו עוד בתי כנסת בעיר; אפשר להוסיף את כולם.
       </p>
     </div>
   </section>
@@ -92,24 +93,38 @@
   <script src="components.js"></script>
   <script src="script.js"></script>
   <script>
+    // נתונים מתוך המדריך הרשמי של המועצה הדתית ראש העין (mdrh.org.il)
+    // נוסח וכתובת — מהמקור הרשמי. זמני תפילה/גבאי — לאימות באתר המועצה הדתית.
     var SHULS = [
-      { name: 'בית כנסת מרכזי (לדוגמה)', nusach: 'נוסח תימן · בלאדי', address: 'רחוב — לעדכון, ראש העין', gabbai: 'לעדכון', phone: 'לעדכון',
-        times: 'שחרית: לעדכון · מנחה: לעדכון · ערבית: לעדכון' },
-      { name: 'בית כנסת שערי ציון (לדוגמה)', nusach: 'נוסח תימן · שאמי', address: 'רחוב — לעדכון, ראש העין', gabbai: 'לעדכון', phone: 'לעדכון',
-        times: 'שחרית: לעדכון · מנחה/ערבית: לעדכון' },
-      { name: 'בית כנסת אהל שלום (לדוגמה)', nusach: 'נוסח ספרד', address: 'רחוב — לעדכון, ראש העין', gabbai: 'לעדכון', phone: 'לעדכון',
-        times: 'שחרית: לעדכון · מנחה: לעדכון' }
+      { name: 'משכן אפק',           nusach: 'נוסח תימן · בלאדי', address: 'קרל לינדנשטראוס 6, ראש העין' },
+      { name: 'נביאי תימן',          nusach: 'נוסח תימן · בלאדי', address: 'אליהו הנביא 45, ראש העין' },
+      { name: 'אפיקי תימן',          nusach: 'נוסח תימן · בלאדי', address: 'דרך הציונות 17, ראש העין' },
+      { name: 'משכן שמעון',          nusach: 'נוסח תימן · בלאדי', address: 'רש"י 94, ראש העין' },
+      { name: 'אוהל משה ועמנואל',    nusach: 'נוסח תימן · בלאדי', address: 'דוד המלך 1, ראש העין' },
+      { name: 'בית מנחם',            nusach: 'נוסח תימן · שאמי', address: 'צה"ל 3, ראש העין' },
+      { name: 'שם ועבר',             nusach: 'נוסח תימן · שאמי', address: 'מנצורה 40, ראש העין' },
+      { name: 'חפץ חיים',            nusach: 'נוסח תימן · שאמי', address: 'קנדי / מלכי ישראל, ראש העין' },
+      { name: 'שער השמים',           nusach: 'נוסח תימן · שאמי', address: 'צה"ל 101, ראש העין' },
+      { name: 'אהבת ישראל',          nusach: 'נוסח ספרד', address: 'יגאל אלון 1, ראש העין' },
+      { name: 'בית הכנסת הספרדי',     nusach: 'נוסח ספרד', address: 'ברקן 2, ראש העין' },
+      { name: 'הספרדי פסגות אפק (מאור ישראל)', nusach: 'נוסח ספרד', address: 'הרב שלום שבזי 182, ראש העין' },
+      { name: 'אבן העזר',            nusach: 'נוסח ספרד', address: 'מבצע דני, ראש העין' },
+      { name: 'נוה צדק',             nusach: 'נוסח אשכנז', address: 'ש"י עגנון 5, ראש העין' },
+      { name: 'סיני',                nusach: 'נוסח אשכנז', address: 'סיני 17, ראש העין' },
+      { name: 'בית הכנסת המרכזי פסגות אפק', nusach: 'בית כנסת מרכזי', address: 'נתן אלתרמן, ראש העין' },
+      { name: 'דברי קהלת',           nusach: 'בית כנסת', address: 'אפק 25, ראש העין' },
+      { name: 'ישיבת צדק ושלום',     nusach: 'נוסח ירושלים', address: 'חפץ חיים 6, ראש העין' }
     ];
     function mapsLink(q) { return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); }
     document.getElementById('shulsGrid').innerHTML = SHULS.map(function (s) {
+      var navQuery = s.address ? (s.address) : (s.name + ' ראש העין');
       return '<div class="card shul">' +
         '<span class="nusach">' + s.nusach + '</span>' +
         '<h3>' + s.name + '</h3>' +
         '<p class="addr"><b>כתובת:</b> ' + s.address + '</p>' +
-        '<p class="addr"><b>גבאי:</b> ' + s.gabbai + ' · <b>טלפון:</b> ' + s.phone + '</p>' +
-        '<div class="times">🕐 ' + s.times + '</div>' +
         '<div class="shul-actions">' +
-          '<a href="' + mapsLink(s.name + ' ראש העין') + '" target="_blank" rel="noopener">📍 ניווט במפות</a>' +
+          '<a href="' + mapsLink(navQuery) + '" target="_blank" rel="noopener">📍 ניווט במפות</a>' +
+          '<a href="https://mdrh.org.il/directory-synagogues/" target="_blank" rel="noopener">🕐 זמני תפילה</a>' +
         '</div>' +
       '</div>';
     }).join('');
