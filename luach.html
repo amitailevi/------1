@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לוח זמנים יהודי - ראש העין | כולל הרש"ש</title>
+  <meta name="description" content="לוח זמנים הלכתי יומי לראש העין - עלות השחר, נץ החמה, סוף זמן קריאת שמע, חצות, מנחה, שקיעה וצאת הכוכבים, תאריך עברי, פרשת השבוע ודף יומי.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="logo">ש</span>
+        <div><b>כולל הרש"ש</b><br><span>ראש העין</span></div>
+      </a>
+      <button class="nav-toggle" onclick="toggleMenu()" aria-label="תפריט">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">בית</a></li>
+        <li><a href="luach.html">לוח זמנים</a></li>
+        <li><a href="index.html#news">חדשות</a></li>
+        <li><a href="index.html#judaism">בתי כנסת</a></li>
+        <li><a href="index.html#rashash">הרש"ש</a></li>
+        <li><a href="index.html#teimanim">יהדות תימן</a></li>
+        <li><a href="index.html#about">צור קשר</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="page-head">
+    <div class="container">
+      <h1>🕯️ לוח זמנים יהודי</h1>
+      <p>זמנים הלכתיים יומיים · ראש העין</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="date-bar">
+        <button class="btn ghost" onclick="changeDay(-1)">▶ אתמול</button>
+        <input type="date" id="dateInput" onchange="loadLuach()">
+        <button class="btn ghost" onclick="changeDay(1)">מחר ◀</button>
+        <button class="btn" onclick="goToday()">היום</button>
+      </div>
+
+      <div class="hebdate" id="hebDate">טוען…</div>
+      <div class="hebdate-events" id="hebEvents"></div>
+
+      <div class="luach-grid" id="zmanim">
+        <p style="grid-column:1/-1; text-align:center; color:var(--muted)">טוען זמנים…</p>
+      </div>
+
+      <div class="luach-extra" id="extra"></div>
+
+      <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-top:30px;">
+        הזמנים מחושבים למיקום ראש העין (קו רוחב 32.0956°, קו אורך 34.9568°) באמצעות שירות Hebcal.<br>
+        ⚠️ הזמנים להמחשה כללית — יש לאמת מול לוח מוסמך ורב הקהילה לפני הסתמכות הלכתית.
+      </p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">© <span id="year"></span> עמותת כולל הרש"ש ראש העין · כל הזכויות שמורות</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    var LAT = 32.0956, LNG = 34.9568, TZ = 'Asia/Jerusalem';
+
+    // רשימת הזמנים שמוצגים, לפי הסדר. hl = להדגיש.
+    var ZMANIM = [
+      { key: 'chatzotNight',   name: 'חצות הלילה' },
+      { key: 'alotHaShachar',  name: 'עלות השחר', sub: 'עמוד השחר' },
+      { key: 'misheyakir',     name: 'משיכיר', sub: 'זמן טלית ותפילין' },
+      { key: 'sunrise',        name: 'הנץ החמה', sub: 'זריחה', hl: true },
+      { key: 'sofZmanShma',    name: 'סוף זמן ק"ש', sub: 'גר"א', hl: true },
+      { key: 'sofZmanShmaMGA', name: 'סוף זמן ק"ש', sub: 'מג"א' },
+      { key: 'sofZmanTfilla',  name: 'סוף זמן תפילה', sub: 'גר"א' },
+      { key: 'chatzot',        name: 'חצות היום', hl: true },
+      { key: 'minchaGedola',   name: 'מנחה גדולה' },
+      { key: 'minchaKetana',   name: 'מנחה קטנה' },
+      { key: 'plagHaMincha',   name: 'פלג המנחה' },
+      { key: 'sunset',         name: 'שקיעת החמה', sub: 'שקיעה', hl: true },
+      { key: 'tzeit85deg',     name: 'צאת הכוכבים', sub: 'צאת', hl: true },
+      { key: 'tzeit72min',     name: 'צאת ר"ת', sub: '72 דקות' }
+    ];
+
+    function fmtTime(iso) {
+      if (!iso) return '--:--';
+      return new Date(iso).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+    }
+    function isoDate(d) {
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function goToday() { document.getElementById('dateInput').value = isoDate(new Date()); loadLuach(); }
+    function changeDay(delta) {
+      var inp = document.getElementById('dateInput');
+      var d = inp.value ? new Date(inp.value + 'T12:00:00') : new Date();
+      d.setDate(d.getDate() + delta);
+      inp.value = isoDate(d);
+      loadLuach();
+    }
+
+    async function loadLuach() {
+      var date = document.getElementById('dateInput').value || isoDate(new Date());
+      loadZmanim(date);
+      loadHebDate(date);
+      loadExtras(date);
+    }
+
+    async function loadZmanim(date) {
+      var box = document.getElementById('zmanim');
+      try {
+        var url = 'https://www.hebcal.com/zmanim?cfg=json&latitude=' + LAT + '&longitude=' + LNG +
+                  '&tzid=' + TZ + '&date=' + date;
+        var res = await fetch(url);
+        var data = await res.json();
+        var t = data.times || {};
+        box.innerHTML = ZMANIM.map(function (z) {
+          return '<div class="zman' + (z.hl ? ' hl' : '') + '">' +
+            '<div class="name">' + z.name + (z.sub ? '<small>' + z.sub + '</small>' : '') + '</div>' +
+            '<div class="t">' + fmtTime(t[z.key]) + '</div>' +
+          '</div>';
+        }).join('');
+      } catch (e) {
+        box.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:var(--muted)">לא ניתן לטעון זמנים כעת. נסו לרענן.</p>';
+      }
+    }
+
+    async function loadHebDate(date) {
+      var el = document.getElementById('hebDate');
+      var ev = document.getElementById('hebEvents');
+      try {
+        var p = date.split('-');
+        var url = 'https://www.hebcal.com/converter?cfg=json&gy=' + p[0] + '&gm=' + (+p[1]) +
+                  '&gd=' + (+p[2]) + '&g2h=1&strict=1';
+        var res = await fetch(url);
+        var data = await res.json();
+        el.innerHTML = '<span class="gold-text">' + (data.hebrew || '') + '</span>';
+        ev.textContent = (data.events && data.events.length) ? data.events.join(' · ') : '';
+      } catch (e) { el.textContent = ''; }
+    }
+
+    async function loadExtras(date) {
+      var box = document.getElementById('extra');
+      var cards = [];
+      // דף יומי
+      try {
+        var r1 = await fetch('https://www.hebcal.com/dafyomi?cfg=json&date=' + date);
+        var d1 = await r1.json();
+        var daf = (d1.hebrew) || (d1.name && d1.name.he) || (d1.name && d1.name.en) || '';
+        if (daf) cards.push({ ico: '📖', label: 'דף יומי', val: daf });
+      } catch (e) {}
+      // פרשת השבוע (השבת הקרובה)
+      try {
+        var r2 = await fetch('https://www.hebcal.com/shabbat?cfg=json&latitude=' + LAT +
+                  '&longitude=' + LNG + '&tzid=' + TZ + '&lg=h');
+        var d2 = await r2.json();
+        var par = (d2.items || []).find(function (i) { return i.category === 'parashat'; });
+        if (par) cards.push({ ico: '📜', label: 'פרשת השבוע', val: par.hebrew || par.title });
+      } catch (e) {}
+
+      box.innerHTML = cards.map(function (c) {
+        return '<div class="card"><div class="ico">' + c.ico + '</div>' +
+          '<div class="meta">' + c.label + '</div>' +
+          '<div class="big">' + c.val + '</div></div>';
+      }).join('');
+    }
+
+    goToday();
+  </script>
+</body>
+</html>
