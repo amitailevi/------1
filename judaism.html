@@ -3,71 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>יהדות בראש העין - בתי כנסת ומקוואות | כולל הרש"ש</title>
-  <meta name="description" content="מדריך לחיי היהדות בראש העין - בתי כנסת, מקוואות, מוסדות תורה, שיעורים וזמני תפילה.">
+  <title>בתי כנסת ומקוואות בראש העין | כולל הרש"ש</title>
+  <meta name="description" content="מדריך בתי הכנסת והמקוואות בראש העין - כתובות, מפות גוגל, גבאים וזמני תפילה.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .map-embed { position: relative; width: 100%; max-width: 960px; margin: 0 auto 36px; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); }
+    .map-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .shul .nusach { display: inline-block; background: var(--techelet-soft); color: var(--techelet-deep); font-size: .74rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+    .shul .addr { color: var(--ink-soft); font-size: .92rem; margin: 3px 0; }
+    .shul .addr b { color: var(--ink); }
+    .shul .times { margin-top: 10px; font-size: .88rem; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 10px; }
+    .shul-actions { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .shul-actions a { font-size: .82rem; padding: 8px 14px; border-radius: 999px; border: 1px solid #cdddf3; color: var(--techelet-deep); transition: background .2s; }
+    .shul-actions a:hover { background: var(--techelet-soft); }
+  </style>
 </head>
 <body>
   <div id="app-header"></div>
 
   <section class="page-head">
     <div class="container">
-      <h1>🕍 יהדות בראש העין</h1>
-      <p>בתי כנסת · מקוואות · מוסדות תורה · זמני תפילה</p>
+      <h1>🕍 בתי כנסת ומקוואות</h1>
+      <p>מדריך קהילתי · ראש העין</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
       <div class="section-title">
-        <h2>מוסדות הקהילה</h2>
-        <p>מדריך כללי לחיי היהדות בעיר</p>
+        <h2 class="gold-text">מפת בתי הכנסת בעיר</h2>
+        <p>בתי הכנסת בראש העין על המפה</p>
       </div>
-      <div class="grid">
-        <div class="card">
-          <div class="ico">🕍</div>
-          <h3>בתי כנסת</h3>
-          <p>בראש העין פועלים עשרות בתי כנסת במגוון נוסחים — ובראשם נוסח תימן (בלאדי ושאמי), לצד נוסח ספרד ועוד. בתי הכנסת הם לב הקהילה ומקום התפילה, הלימוד והכנסת אורחים.</p>
-        </div>
-        <div class="card">
-          <div class="ico">💧</div>
-          <h3>מקוואות</h3>
-          <p>בעיר פזורים מקוואות טהרה לנשים ולגברים, המתוחזקים ברמה גבוהה ובהידור. לפרטי מיקום ושעות פעילות יש לפנות למועצה הדתית ראש העין.</p>
-        </div>
-        <div class="card">
-          <div class="ico">📚</div>
-          <h3>מוסדות תורה וכוללים</h3>
-          <p>כוללי אברכים, ישיבות ותלמודי תורה הפועלים בעיר, ובהם כולל הרש"ש — המשמר את דרך הלימוד והכוונות בנוסח מקובלי תימן וירושלים.</p>
-        </div>
-        <div class="card">
-          <div class="ico">🍽️</div>
-          <h3>כשרות</h3>
-          <p>שירותי כשרות, השגחה ועירוב ניתנים בעיר תחת הרבנות המקומית והמועצה הדתית. מומלץ לאמת תעודות כשרות בעסקים.</p>
-        </div>
+      <div class="map-embed">
+        <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=%D7%91%D7%AA%D7%99%20%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%A8%D7%90%D7%A9%20%D7%94%D7%A2%D7%99%D7%9F&output=embed"
+          title="מפת בתי כנסת ראש העין"></iframe>
       </div>
     </div>
   </section>
 
   <section class="section alt">
     <div class="container">
-      <div class="section-title"><h2>זמני תפילה לדוגמה</h2><p>הזמנים מתעדכנים על פי לוח בית הכנסת</p></div>
-      <div class="prose">
-        <h3>ימי החול</h3>
-        <ul>
-          <li><b>שחרית:</b> מניינים החל מהנץ החמה ועד שעות הבוקר המאוחרות.</li>
-          <li><b>מנחה:</b> לפני ואחרי השקיעה, לפי עונות השנה.</li>
-          <li><b>ערבית:</b> מניינים רצופים בשעות הערב.</li>
-        </ul>
-        <h3>שבת קודש</h3>
-        <ul>
-          <li><b>קבלת שבת ומעריב</b> בכניסת השבת.</li>
-          <li><b>שחרית</b> בבוקר, ולאחריה קידוש ולימוד.</li>
-          <li><b>מנחה, סעודה שלישית וערבית</b> לקראת צאת השבת.</li>
-        </ul>
-        <blockquote>זמני כניסת ויציאת השבת המעודכנים לראש העין מופיעים ב<a href="index.html#shabbat">עמוד הבית</a>.</blockquote>
-        <p style="color:var(--muted); font-size:.9rem;">* המידע בעמוד זה כללי ומיועד להתמצאות. לפרטים מדויקים — בית הכנסת, הרבנות והמועצה הדתית ראש העין.</p>
+      <div class="section-title">
+        <h2 class="gold-text">רשימת בתי הכנסת</h2>
+        <p>כתובת · גבאי · זמני תפילה · ניווט</p>
+      </div>
+      <div class="grid" id="shulsGrid"></div>
+      <p style="text-align:center; color:var(--muted); font-size:.88rem; margin-top:24px;">
+        📋 הרשימה לדוגמה וממתינה לנתונים אמיתיים. שלחו לי את רשימת בתי הכנסת (שם, כתובת, נוסח, גבאי, טלפון וזמני תפילה) ואמלא הכל — אפשר עשרות ומאות.
+        <a href="about.html" style="color:var(--techelet)">צרו קשר</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2 class="gold-text">מקוואות טהרה</h2>
+        <p>מקוואות לנשים ולגברים בעיר</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="ico">💧</div>
+          <h3>מקווה נשים</h3>
+          <p class="addr"><b>כתובת:</b> לעדכון</p>
+          <p class="addr"><b>שעות פתיחה:</b> לעדכון</p>
+          <p class="addr"><b>טלפון:</b> לעדכון</p>
+        </div>
+        <div class="card">
+          <div class="ico">💧</div>
+          <h3>מקווה גברים</h3>
+          <p class="addr"><b>כתובת:</b> לעדכון</p>
+          <p class="addr"><b>שעות פתיחה:</b> לעדכון</p>
+        </div>
+        <div class="card">
+          <div class="ico">ℹ️</div>
+          <h3>מידע ופרטים</h3>
+          <p>לרשימת המקוואות המלאה, מיקומים ושעות — המועצה הדתית ראש העין.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -76,5 +91,28 @@
 
   <script src="components.js"></script>
   <script src="script.js"></script>
+  <script>
+    var SHULS = [
+      { name: 'בית כנסת מרכזי (לדוגמה)', nusach: 'נוסח תימן · בלאדי', address: 'רחוב — לעדכון, ראש העין', gabbai: 'לעדכון', phone: 'לעדכון',
+        times: 'שחרית: לעדכון · מנחה: לעדכון · ערבית: לעדכון' },
+      { name: 'בית כנסת שערי ציון (לדוגמה)', nusach: 'נוסח תימן · שאמי', address: 'רחוב — לעדכון, ראש העין', gabbai: 'לעדכון', phone: 'לעדכון',
+        times: 'שחרית: לעדכון · מנחה/ערבית: לעדכון' },
+      { name: 'בית כנסת אהל שלום (לדוגמה)', nusach: 'נוסח ספרד', address: 'רחוב — לעדכון, ראש העין', gabbai: 'לעדכון', phone: 'לעדכון',
+        times: 'שחרית: לעדכון · מנחה: לעדכון' }
+    ];
+    function mapsLink(q) { return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); }
+    document.getElementById('shulsGrid').innerHTML = SHULS.map(function (s) {
+      return '<div class="card shul">' +
+        '<span class="nusach">' + s.nusach + '</span>' +
+        '<h3>' + s.name + '</h3>' +
+        '<p class="addr"><b>כתובת:</b> ' + s.address + '</p>' +
+        '<p class="addr"><b>גבאי:</b> ' + s.gabbai + ' · <b>טלפון:</b> ' + s.phone + '</p>' +
+        '<div class="times">🕐 ' + s.times + '</div>' +
+        '<div class="shul-actions">' +
+          '<a href="' + mapsLink(s.name + ' ראש העין') + '" target="_blank" rel="noopener">📍 ניווט במפות</a>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  </script>
 </body>
 </html>
