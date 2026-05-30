@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ספרייה תורנית | כולל הרש"ש ראש העין</title>
+  <meta name="description" content="ספרייה תורנית - קורא תהילים ומזמורים חי, סיפורי הרש&quot;ש הקדוש, ומדף ספרי קודש לקריאה.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .reader { max-width: 820px; margin: 0 auto; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 32px; }
+    .reader-bar { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+    .reader-bar select { padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); font-family: inherit; font-size: 1rem; color: var(--ink); background: #fff; }
+    .reader-title { text-align: center; font-family: 'Frank Ruhl Libre', serif; font-size: 1.8rem; color: var(--ink); font-weight: 700; margin-bottom: 20px; }
+    .reader-text { font-family: 'Frank Ruhl Libre', serif; font-size: 1.4rem; line-height: 2.25; color: var(--ink); text-align: justify; }
+    .reader-text .vn { display: inline-block; color: var(--gold-deep); font-size: .8rem; font-weight: 700; margin: 0 2px 0 6px; vertical-align: super; }
+    .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 18px; max-width: 980px; margin: 0 auto; }
+    .book { background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; transition: transform .2s, box-shadow .2s; text-align: center; }
+    .book:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .book .cover { height: 130px; background: var(--grad-tech); display: grid; place-items: center; color: #fff; font-family: 'Frank Ruhl Libre', serif; font-size: 1.15rem; padding: 12px; line-height: 1.4; }
+    .book:nth-child(3n) .cover { background: linear-gradient(135deg, #caa531, #98761b); }
+    .book:nth-child(3n+2) .cover { background: linear-gradient(135deg, #8a3a64, #5e2545); }
+    .book .bt { padding: 12px 10px; font-weight: 600; color: var(--ink); font-size: .92rem; }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <section class="page-head">
+    <div class="container">
+      <h1>📚 ספרייה תורנית</h1>
+      <p>קריאה במזמורים · סיפורי הרש"ש · מדף ספרי קודש</p>
+    </div>
+  </section>
+
+  <!-- קורא תהילים -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2 class="gold-text">ספר תהילים — קריאת מזמורים</h2>
+        <p>בחרו פרק וקראו — הטקסט נטען חי</p>
+      </div>
+      <div class="reader">
+        <div class="reader-bar">
+          <button class="btn ghost" onclick="changeChap(-1)">▶ הקודם</button>
+          <select id="chapSel" onchange="loadChapter()"></select>
+          <button class="btn ghost" onclick="changeChap(1)">הבא ◀</button>
+        </div>
+        <div class="reader-title" id="readerTitle">מזמור</div>
+        <div class="reader-text" id="readerText">טוען…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- סיפורי הרש"ש -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-title">
+        <h2 class="gold-text">סיפורי הרש"ש הקדוש</h2>
+        <p>מן המסורת על רבן של המקובלים</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="meta">מן המסורת</div>
+          <h3>העלם שהתגלה בבית אל</h3>
+          <p>מסופר כי הרש"ש הגיע מתימן לירושלים בענווה גדולה, ושימש כשמש בישיבת המקובלים "בית אל". כשהתקשו החכמים בקושיה עמוקה, נמצא פתק עם תשובה מאירת עיניים — וכך נתגלתה גדולתו הנסתרת.</p>
+        </div>
+        <div class="card">
+          <div class="meta">מן המסורת</div>
+          <h3>סדר הכוונות</h3>
+          <p>מסופר שזכה לסייעתא דשמיא מיוחדת בסידור כוונות האר"י, עד שאמרו עליו תלמידיו כי דבריו מכוונים לאמיתה של תורת הסוד, וסידורו מאיר לדורות.</p>
+        </div>
+        <div class="card">
+          <div class="meta">מן המסורת</div>
+          <h3>ענוות הצדיק</h3>
+          <p>על אף היותו רבן של כל המקובלים, נהג הרש"ש בענווה ובשפלות רוח יתרה, וברח מן הכבוד — מופת לדורות בדרך ארץ וביראת שמים טהורה.</p>
+        </div>
+      </div>
+      <p style="text-align:center; color:var(--muted); font-size:.88rem; margin-top:24px;">
+        * הסיפורים מובאים מן המסורת המקובלת. יש לכם מקור, נוסח מדויק או סיפור נוסף? נשמח להוסיף — <a href="about.html" style="color:var(--techelet)">צרו קשר</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- מדף ספרים -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2 class="gold-text">מדף ספרי קודש</h2>
+        <p>פתחו את הספר לקריאה באתרי הספרייה התורנית</p>
+      </div>
+      <div class="shelf">
+        <a class="book" href="https://www.sefaria.org.il/Psalms?lang=he" target="_blank" rel="noopener"><div class="cover">ספר תהילים</div><div class="bt">תהילים · קריאה</div></a>
+        <a class="book" href="https://www.sefaria.org.il/Pentateuch?lang=he" target="_blank" rel="noopener"><div class="cover">חמישה חומשי תורה</div><div class="bt">תורה</div></a>
+        <a class="book" href="https://www.sefaria.org.il/Mishnah?lang=he" target="_blank" rel="noopener"><div class="cover">משניות</div><div class="bt">שישה סדרי משנה</div></a>
+        <a class="book" href="https://www.sefaria.org.il/texts/Talmud?lang=he" target="_blank" rel="noopener"><div class="cover">תלמוד בבלי</div><div class="bt">הש"ס</div></a>
+        <a class="book" href="https://www.sefaria.org.il/Pirkei_Avot?lang=he" target="_blank" rel="noopener"><div class="cover">פרקי אבות</div><div class="bt">מסכת אבות</div></a>
+        <a class="book" href="https://hebrewbooks.org/" target="_blank" rel="noopener"><div class="cover">סידור הרש"ש</div><div class="bt">חיפוש ב-HebrewBooks</div></a>
+        <a class="book" href="https://www.sefaria.org.il/Zohar?lang=he" target="_blank" rel="noopener"><div class="cover">ספר הזוהר</div><div class="bt">קבלה</div></a>
+        <a class="book" href="https://www.sefaria.org.il/texts?lang=he" target="_blank" rel="noopener"><div class="cover">מאות ספרי קודש</div><div class="bt">לכל הספרייה</div></a>
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <a class="btn" href="https://www.sefaria.org.il/texts?lang=he" target="_blank" rel="noopener">לספרייה המלאה — מאות ספרים</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="app-footer"></div>
+
+  <script src="components.js"></script>
+  <script src="script.js"></script>
+  <script>
+    var chap = 1, MAX = 150;
+    function gematria(n) { // מספר עברי פשוט עד 150
+      var ones = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
+      var tens = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
+      var huns = ['', 'ק'];
+      var s = huns[Math.floor(n / 100)] + tens[Math.floor((n % 100) / 10)] + ones[n % 10];
+      s = s.replace('יה', 'טו').replace('יו', 'טז');
+      if (s.length > 1) s = s.slice(0, -1) + '"' + s.slice(-1);
+      else if (s.length === 1) s = s + "'";
+      return s;
+    }
+    function fillSelect() {
+      var sel = document.getElementById('chapSel'), o = '';
+      for (var i = 1; i <= MAX; i++) o += '<option value="' + i + '">מזמור ' + gematria(i) + '</option>';
+      sel.innerHTML = o;
+    }
+    function changeChap(d) {
+      chap = Math.min(MAX, Math.max(1, chap + d));
+      document.getElementById('chapSel').value = chap;
+      loadChapter();
+    }
+    async function loadChapter() {
+      chap = parseInt(document.getElementById('chapSel').value, 10) || 1;
+      var t = document.getElementById('readerText');
+      document.getElementById('readerTitle').textContent = 'תהילים · מזמור ' + gematria(chap);
+      t.textContent = 'טוען…';
+      try {
+        var res = await fetch('https://www.sefaria.org/api/texts/Psalms.' + chap + '?lang=he&context=0');
+        var data = await res.json();
+        var verses = data.he || [];
+        if (!verses.length) { t.textContent = 'לא נמצא טקסט.'; return; }
+        t.innerHTML = verses.map(function (v, i) {
+          var clean = String(v).replace(/<[^>]*>/g, '');
+          return '<span class="vn">' + gematria(i + 1) + '</span>' + clean + ' ';
+        }).join('');
+      } catch (e) {
+        t.innerHTML = 'לא ניתן לטעון את הטקסט כעת. ' +
+          '<a href="https://www.sefaria.org.il/Psalms.' + chap + '?lang=he" target="_blank" rel="noopener" style="color:var(--techelet)">לקריאה ב-Sefaria</a>';
+      }
+    }
+    fillSelect();
+    loadChapter();
+  </script>
+</body>
+</html>

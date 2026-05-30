@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>לוח שנה יהודי | כולל הרש"ש ראש העין</title>
+  <meta name="description" content="לוח שנה עברי יפה - תצוגת חודש עם תאריכים עבריים, חגים, מועדים וראשי חודשים.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cal-bar { display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+    .cal-title { font-family: 'Frank Ruhl Libre', serif; font-size: 1.7rem; color: var(--ink); font-weight: 700; min-width: 280px; text-align: center; }
+    .cal-sub { text-align: center; color: var(--muted); margin-bottom: 26px; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 940px; margin: 0 auto; }
+    .cal-dow { text-align: center; font-weight: 700; color: var(--techelet-deep); padding: 6px 0; font-size: .9rem; }
+    .cal-cell { min-height: 94px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow-sm); transition: transform .2s, border-color .2s; }
+    .cal-cell:hover { transform: translateY(-2px); border-color: #cdddf3; }
+    .cal-cell.empty { background: transparent; border: none; box-shadow: none; }
+    .cal-cell .greg { font-weight: 800; color: var(--ink); font-size: 1.05rem; }
+    .cal-cell .heb { font-family: 'Frank Ruhl Libre', serif; color: var(--techelet); font-size: .98rem; }
+    .cal-cell .evs { margin-top: auto; display: flex; flex-direction: column; gap: 2px; }
+    .cal-cell .ev { background: var(--techelet-soft); color: var(--techelet-deep); font-size: .66rem; border-radius: 6px; padding: 1px 5px; line-height: 1.45; }
+    .cal-cell.today { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(198,160,46,.45); }
+    .cal-cell.today .greg { color: var(--gold-deep); }
+    .cal-cell.shabbat { background: var(--bg-tint); }
+    .cal-cell.holiday .ev { background: #f6e6ef; color: var(--argaman); }
+    .cal-legend { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 22px; color: var(--muted); font-size: .85rem; }
+    .cal-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+    @media (max-width: 680px) {
+      .cal-grid { gap: 4px; }
+      .cal-cell { min-height: 62px; padding: 4px; border-radius: 8px; }
+      .cal-cell .greg { font-size: .85rem; }
+      .cal-cell .heb { font-size: .72rem; }
+      .cal-cell .ev { font-size: .52rem; padding: 1px 3px; }
+      .cal-dow { font-size: .72rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <section class="page-head">
+    <div class="container">
+      <h1>📅 לוח שנה יהודי</h1>
+      <p>תאריך עברי · חגים ומועדים · ראשי חודשים</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cal-bar">
+        <button class="btn ghost" onclick="changeMonth(-1)">▶ קודם</button>
+        <div class="cal-title" id="calTitle">…</div>
+        <button class="btn ghost" onclick="changeMonth(1)">הבא ◀</button>
+        <button class="btn" onclick="goThisMonth()">החודש</button>
+      </div>
+      <div class="cal-sub" id="calSub"></div>
+
+      <div class="cal-grid" id="calGrid"></div>
+
+      <div class="cal-legend">
+        <span><i class="dot" style="background:var(--gold)"></i> היום</span>
+        <span><i class="dot" style="background:var(--bg-tint);border:1px solid var(--line)"></i> שבת</span>
+        <span><i class="dot" style="background:#f6e6ef"></i> חג / מועד</span>
+      </div>
+
+      <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-top:26px;">
+        התאריכים העבריים מחושבים במכשיר · החגים והמועדים נטענים משירות Hebcal · לוח לנוחות בלבד.
+      </p>
+    </div>
+  </section>
+
+  <div id="app-footer"></div>
+
+  <script src="components.js"></script>
+  <script src="script.js"></script>
+  <script>
+    var view = new Date();
+    view.setDate(1);
+
+    var DOW = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+    var hebDay = new Intl.DateTimeFormat('he-u-ca-hebrew', { day: 'numeric' });
+    var hebMY  = new Intl.DateTimeFormat('he-u-ca-hebrew', { month: 'long', year: 'numeric' });
+    var hebMonth = new Intl.DateTimeFormat('he-u-ca-hebrew', { month: 'long' });
+
+    function isoDate(d) {
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+    function changeMonth(delta) { view.setMonth(view.getMonth() + delta); render(); }
+    function goThisMonth() { view = new Date(); view.setDate(1); render(); }
+
+    async function render() {
+      var y = view.getFullYear(), m = view.getMonth();
+      var first = new Date(y, m, 1);
+      var daysInMonth = new Date(y, m + 1, 0).getDate();
+      var todayIso = isoDate(new Date());
+
+      document.getElementById('calTitle').textContent =
+        first.toLocaleDateString('he-IL', { month: 'long', year: 'numeric' });
+      // טווח חודשים עבריים
+      var hStart = hebMonth.format(new Date(y, m, 1));
+      var hEnd = hebMonth.format(new Date(y, m, daysInMonth));
+      var hYear = hebMY.format(new Date(y, m, 15)).split(' ').slice(1).join(' ');
+      document.getElementById('calSub').textContent =
+        (hStart === hEnd ? hStart : hStart + '–' + hEnd) + ' ' + hYear;
+
+      // אירועים מ-Hebcal לחודש זה
+      var events = {};
+      try {
+        var url = 'https://www.hebcal.com/hebcal?v=1&cfg=json&year=' + y + '&month=' + (m + 1) +
+          '&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&lg=h&c=off';
+        var res = await fetch(url);
+        var data = await res.json();
+        (data.items || []).forEach(function (it) {
+          if (!it.date) return;
+          var key = it.date.substring(0, 10);
+          (events[key] = events[key] || []).push(it.title);
+        });
+      } catch (e) {}
+
+      var html = '';
+      DOW.forEach(function (d) { html += '<div class="cal-dow">' + d + '</div>'; });
+      for (var i = 0; i < first.getDay(); i++) html += '<div class="cal-cell empty"></div>';
+
+      for (var day = 1; day <= daysInMonth; day++) {
+        var date = new Date(y, m, day);
+        var iso = isoDate(date);
+        var cls = 'cal-cell';
+        if (iso === todayIso) cls += ' today';
+        if (date.getDay() === 6) cls += ' shabbat';
+        var evs = events[iso] || [];
+        if (evs.length) cls += ' holiday';
+        var evHtml = evs.map(function (t) { return '<div class="ev">' + t + '</div>'; }).join('');
+        html += '<div class="' + cls + '">' +
+          '<div class="greg">' + day + '</div>' +
+          '<div class="heb">' + hebDay.format(date) + '</div>' +
+          '<div class="evs">' + evHtml + '</div></div>';
+      }
+      document.getElementById('calGrid').innerHTML = html;
+    }
+
+    render();
+  </script>
+</body>
+</html>

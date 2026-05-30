@@ -11,24 +11,7 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="logo">ש</span>
-        <div><b>כולל הרש"ש</b><br><span>ראש העין</span></div>
-      </a>
-      <button class="nav-toggle" onclick="toggleMenu()" aria-label="תפריט">☰</button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">בית</a></li>
-        <li><a href="luach.html">לוח זמנים</a></li>
-        <li><a href="news.html">חדשות</a></li>
-        <li><a href="judaism.html">בתי כנסת</a></li>
-        <li><a href="rashash.html">הרש"ש</a></li>
-        <li><a href="teimanim.html">יהדות תימן</a></li>
-        <li><a href="about.html">צור קשר</a></li>
-      </ul>
-    </div>
-  </header>
+  <div id="app-header"></div>
 
   <section class="page-head">
     <div class="container">
@@ -63,12 +46,9 @@
     </div>
   </section>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-bottom">© <span id="year"></span> עמותת כולל הרש"ש ראש העין · כל הזכויות שמורות</div>
-    </div>
-  </footer>
+  <div id="app-footer"></div>
 
+  <script src="components.js"></script>
   <script src="script.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
