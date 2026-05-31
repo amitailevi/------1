@@ -9,50 +9,95 @@
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .tools { max-width: 900px; margin: 0 auto 22px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
-    .tools .search { flex: 1; min-width: 220px; max-width: 460px; position: relative; }
-    .tools .search input { width: 100%; padding: 12px 42px 12px 16px; border-radius: 12px; border: 1px solid var(--line); font-family: inherit; font-size: 1rem; color: var(--ink); background: #fff; box-shadow: var(--shadow-sm); }
-    .tools .search::before { content: "🔍"; position: absolute; top: 50%; right: 14px; transform: translateY(-50%); opacity: .6; }
-    .count-line { text-align: center; color: var(--muted); font-size: .9rem; margin-bottom: 22px; }
+    /* רקע מהודר לעמוד */
+    .sip-hero { position: relative; overflow: hidden; }
+    .sip-hero::after {
+      content: "ש"; position: absolute; top: 50%; right: 50%; transform: translate(50%, -50%);
+      font-family: 'Frank Ruhl Libre', serif; font-size: 22rem; color: rgba(198,160,46,.06);
+      pointer-events: none; line-height: 1; z-index: 0;
+    }
+    .sip-hero > .container { position: relative; z-index: 1; }
 
-    .stories { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 18px; max-width: 1080px; margin: 0 auto; }
-    .story-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 22px; cursor: pointer; transition: transform .22s, box-shadow .22s, border-color .22s; display: flex; flex-direction: column; gap: 8px; }
-    .story-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: #dbe6f5; }
-    .story-card .num { width: 38px; height: 38px; border-radius: 50%; background: var(--grad-gold); color: #fff; display: grid; place-items: center; font-family: 'Frank Ruhl Libre', serif; font-weight: 700; font-size: 1.05rem; box-shadow: 0 4px 12px rgba(198,160,46,.35); }
-    .story-card h3 { color: var(--ink); font-size: 1.18rem; line-height: 1.4; }
-    .story-card .tag { align-self: flex-start; font-size: .72rem; font-weight: 700; letter-spacing: 1px; color: var(--techelet); background: var(--techelet-soft); padding: 3px 10px; border-radius: 999px; }
-    .story-card .peek { color: var(--ink-soft); font-size: .92rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .no-results { grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted); }
+    .tools { max-width: 900px; margin: 0 auto 18px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
+    .tools .search { flex: 1; min-width: 220px; max-width: 480px; position: relative; }
+    .tools .search input { width: 100%; padding: 14px 46px 14px 18px; border-radius: 999px; border: 1px solid var(--line); font-family: inherit; font-size: 1.02rem; color: var(--ink); background: #fff; box-shadow: var(--shadow-sm); transition: box-shadow .25s, border-color .25s; }
+    .tools .search input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 4px rgba(198,160,46,.14); }
+    .tools .search::before { content: "🔍"; position: absolute; top: 50%; right: 16px; transform: translateY(-50%); opacity: .55; }
+    .count-line { text-align: center; color: var(--muted); font-size: .9rem; margin-bottom: 30px; }
+
+    .stories { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 22px; max-width: 1100px; margin: 0 auto; }
+
+    .story-card {
+      position: relative; background: #fff; border: 1px solid var(--line);
+      border-radius: 20px; box-shadow: var(--shadow-sm); padding: 26px 24px 24px;
+      cursor: pointer; overflow: hidden;
+      transition: transform .28s cubic-bezier(.2,.7,.3,1), box-shadow .28s, border-color .28s;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    /* פס עליון מוזהב נמתח */
+    .story-card::before { content: ""; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: var(--grad-gold); transform: scaleX(0); transform-origin: right; transition: transform .35s; }
+    /* עיטור פינתי דהוי */
+    .story-card::after { content: "❝"; position: absolute; bottom: -18px; left: 8px; font-family: 'Frank Ruhl Libre', serif; font-size: 6rem; color: rgba(31,99,184,.05); line-height: 1; pointer-events: none; transition: color .3s; }
+    .story-card:hover { transform: translateY(-7px); box-shadow: 0 24px 50px rgba(20,45,90,.14); border-color: #ecd9a0; }
+    .story-card:hover::before { transform: scaleX(1); }
+    .story-card:hover::after { color: rgba(198,160,46,.13); }
+
+    .story-card .top { display: flex; align-items: center; gap: 12px; }
+    .story-card .num {
+      flex: none; width: 46px; height: 46px; border-radius: 14px;
+      background: var(--grad-tech); color: #fff; display: grid; place-items: center;
+      font-family: 'Frank Ruhl Libre', serif; font-weight: 700; font-size: 1.3rem;
+      box-shadow: 0 6px 16px rgba(31,99,184,.32); transform: rotate(-4deg); transition: transform .3s;
+    }
+    .story-card:hover .num { transform: rotate(0); }
+    /* כל כרטיס שלישי — מספר בזהב, לגיוון */
+    .story-card.alt .num { background: var(--grad-gold); box-shadow: 0 6px 16px rgba(198,160,46,.36); }
+    .story-card .tag { font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; color: var(--techelet-deep); background: var(--techelet-soft); padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+    .story-card.alt .tag { color: var(--gold-deep); background: #fbf3da; }
+    .story-card h3 { color: var(--ink); font-size: 1.28rem; line-height: 1.45; font-family: 'Frank Ruhl Libre', serif; position: relative; z-index: 1; }
+    .story-card .peek { color: var(--ink-soft); font-size: .93rem; line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; position: relative; z-index: 1; }
+    .story-card .read-more { margin-top: auto; padding-top: 6px; color: var(--techelet); font-weight: 700; font-size: .86rem; display: inline-flex; align-items: center; gap: 5px; }
+    .story-card.alt .read-more { color: var(--gold-deep); }
+
+    .no-results { grid-column: 1/-1; text-align: center; padding: 50px; color: var(--muted); font-size: 1.05rem; }
 
     /* קורא הסיפור (מודאל) */
-    .reader-overlay { position: fixed; inset: 0; background: rgba(10,18,38,.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .reader-overlay.open { display: flex; }
-    .reader-modal { background: var(--bg); border-radius: 22px; max-width: 720px; width: 100%; max-height: 88vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,.4); position: relative; }
-    .reader-modal .rm-head { position: sticky; top: 0; background: var(--grad-tech); color: #fff; padding: 26px 30px; border-radius: 22px 22px 0 0; }
-    .reader-modal .rm-head .rm-num { font-size: .82rem; letter-spacing: 2px; color: #ffe9a8; }
-    .reader-modal .rm-head h2 { font-size: 1.6rem; margin-top: 4px; line-height: 1.35; }
-    .reader-modal .rm-close { position: absolute; top: 18px; left: 18px; background: rgba(255,255,255,.18); border: 0; color: #fff; width: 38px; height: 38px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; line-height: 1; }
-    .reader-modal .rm-close:hover { background: rgba(255,255,255,.32); }
-    .reader-modal .rm-body { padding: 28px 30px; font-family: 'Frank Ruhl Libre', serif; font-size: 1.22rem; line-height: 2; color: var(--ink); text-align: justify; }
-    .reader-modal .rm-body p { margin-bottom: 16px; }
-    .reader-modal .rm-source { font-family: 'Heebo', sans-serif; font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; margin-top: 10px; }
-    .reader-modal .rm-nav { display: flex; justify-content: space-between; gap: 10px; padding: 0 30px 28px; }
-    .reader-modal .rm-nav button { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #cdddf3; background: #fff; color: var(--techelet-deep); font-family: inherit; font-weight: 700; cursor: pointer; transition: background .2s; }
-    .reader-modal .rm-nav button:hover:not(:disabled) { background: var(--techelet-soft); }
-    .reader-modal .rm-nav button:disabled { opacity: .4; cursor: default; }
+    .reader-overlay { position: fixed; inset: 0; background: rgba(10,18,38,.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .reader-overlay.open { display: flex; animation: fadeIn .25s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .reader-modal { background: var(--bg); border-radius: 26px; max-width: 740px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 40px 90px rgba(0,0,0,.45); position: relative; animation: popIn .32s cubic-bezier(.2,.8,.3,1); }
+    @keyframes popIn { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
+    .reader-modal .rm-head { position: sticky; top: 0; background: var(--grad-tech); color: #fff; padding: 30px 32px 26px; border-radius: 26px 26px 0 0; overflow: hidden; z-index: 3; }
+    .reader-modal .rm-head::after { content: "❝"; position: absolute; bottom: -30px; left: 14px; font-family: 'Frank Ruhl Libre', serif; font-size: 8rem; color: rgba(255,255,255,.08); line-height: 1; pointer-events: none; }
+    .reader-modal .rm-head .rm-num { font-size: .8rem; letter-spacing: 2px; color: #ffe9a8; position: relative; z-index: 1; }
+    .reader-modal .rm-head h2 { font-size: 1.75rem; margin-top: 6px; line-height: 1.35; position: relative; z-index: 1; }
+    .reader-modal .rm-close { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,.18); border: 0; color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.3rem; cursor: pointer; line-height: 1; transition: background .2s, transform .2s; z-index: 4; }
+    .reader-modal .rm-close:hover { background: rgba(255,255,255,.34); transform: rotate(90deg); }
+    .reader-modal .rm-body { padding: 30px 34px 8px; font-family: 'Frank Ruhl Libre', serif; font-size: 1.26rem; line-height: 2.05; color: var(--ink); text-align: justify; }
+    /* אות פתיחה מעוטרת */
+    .reader-modal .rm-body p:first-of-type::first-letter { font-size: 2.8rem; font-weight: 700; color: var(--gold-deep); float: right; line-height: .9; margin: 6px 0 0 8px; }
+    .reader-modal .rm-body p { margin-bottom: 18px; }
+    .reader-modal .rm-source { font-family: 'Heebo', sans-serif; font-size: .85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; margin-top: 12px; text-align: center; }
+    .reader-modal .rm-source::before { content: "✦"; color: var(--gold); margin-left: 6px; }
+    .reader-modal .rm-nav { display: flex; justify-content: space-between; gap: 10px; padding: 18px 34px 30px; }
+    .reader-modal .rm-nav button { flex: 1; padding: 13px; border-radius: 14px; border: 1px solid #cdddf3; background: #fff; color: var(--techelet-deep); font-family: inherit; font-weight: 700; cursor: pointer; transition: background .2s, transform .15s; }
+    .reader-modal .rm-nav button:hover:not(:disabled) { background: var(--techelet-soft); transform: translateY(-1px); }
+    .reader-modal .rm-nav button:disabled { opacity: .35; cursor: default; }
 
     @media (max-width: 600px) {
-      .reader-modal .rm-head h2 { font-size: 1.3rem; }
-      .reader-modal .rm-body { font-size: 1.12rem; padding: 22px; }
+      .sip-hero::after { font-size: 14rem; }
+      .reader-modal .rm-head h2 { font-size: 1.4rem; }
+      .reader-modal .rm-body { font-size: 1.16rem; padding: 24px 22px 6px; }
     }
   </style>
 </head>
 <body>
   <div id="app-header"></div>
 
-  <section class="page-head">
+  <section class="page-head sip-hero">
     <div class="container">
-      <h1>📜 סיפורי הרש"ש הקדוש</h1>
+      <div style="font-size:2.6rem; margin-bottom:6px;">📜</div>
+      <h1>סיפורי הרש"ש הקדוש</h1>
       <p>רבי שלום מזרחי שרעבי זצ"ל · מסורות וסיפורים</p>
     </div>
   </section>
@@ -65,7 +110,7 @@
       <div class="count-line" id="countLine"></div>
       <div class="stories" id="storiesGrid"></div>
 
-      <p style="text-align:center; color:var(--muted); font-size:.86rem; margin-top:30px; max-width:720px; margin-inline:auto;">
+      <p style="text-align:center; color:var(--muted); font-size:.86rem; margin-top:36px; max-width:720px; margin-inline:auto;">
         הסיפורים מובאים מן המסורת המקובלת על הרש"ש הקדוש ועל ישיבת המקובלים "בית אל".
         להעמקה ולמקורות — <a href="library.html" style="color:var(--techelet)">הספרייה התורנית</a> ועמוד
         <a href="rashash.html" style="color:var(--techelet)">הרש"ש הקדוש</a>.
@@ -114,12 +159,16 @@
       if (!idxs.length) { grid.innerHTML = '<div class="no-results">לא נמצאו סיפורים התואמים לחיפוש.</div>'; return; }
       grid.innerHTML = idxs.map(function (i) {
         var s = STORIES[i];
-        var peek = s.body.replace(/<[^>]*>/g, '').slice(0, 110);
-        return '<div class="story-card" onclick="openReader(' + i + ')">' +
-          '<div class="num">' + (i + 1) + '</div>' +
-          (s.tag ? '<span class="tag">' + s.tag + '</span>' : '') +
+        var peek = s.body.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').slice(0, 130);
+        var alt = (i % 3 === 2) ? ' alt' : '';
+        return '<div class="story-card' + alt + '" onclick="openReader(' + i + ')">' +
+          '<div class="top">' +
+            '<div class="num">' + (i + 1) + '</div>' +
+            (s.tag ? '<span class="tag">' + s.tag + '</span>' : '') +
+          '</div>' +
           '<h3>' + s.title + '</h3>' +
           '<div class="peek">' + peek + '…</div>' +
+          '<span class="read-more">קראו את הסיפור ◀</span>' +
         '</div>';
       }).join('');
     }
