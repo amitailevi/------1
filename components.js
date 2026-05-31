@@ -8,6 +8,7 @@
     ['newcity.html',  'ראש העין החדשה'],
     ['library.html',  'ספרייה'],
     ['rashash.html',  'הרש"ש'],
+    ['sippurim.html', 'סיפורי הרש"ש'],
     ['about.html',    'צור קשר']
   ];
 
@@ -40,6 +41,7 @@
           '<a href="library.html">ספרייה תורנית</a></div>' +
         '<div><h4>מורשת וקהילה</h4>' +
           '<a href="rashash.html">הרש"ש הקדוש</a>' +
+          '<a href="sippurim.html">סיפורי הרש"ש</a>' +
           '<a href="teimanim.html">יהדות תימן</a>' +
           '<a href="news.html">חדשות</a>' +
           '<a href="about.html">צור קשר</a></div>' +
