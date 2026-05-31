@@ -4,20 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>בתי כנסת ומקוואות בראש העין | כולל הרש"ש</title>
-  <meta name="description" content="מדריך בתי הכנסת והמקוואות בראש העין - כתובות, מפות גוגל, גבאים וזמני תפילה.">
+  <meta name="description" content="מדריך בתי הכנסת בראש העין - חיפוש, סינון לפי נוסח, מפת גוגל, ניווט וייצוא ל-PDF/Excel והדפסה. מקור: המועצה הדתית ראש העין.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     .map-embed { position: relative; width: 100%; max-width: 960px; margin: 0 auto 36px; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); }
     .map-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
-    .shul .nusach { display: inline-block; background: var(--techelet-soft); color: var(--techelet-deep); font-size: .74rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
-    .shul .addr { color: var(--ink-soft); font-size: .92rem; margin: 3px 0; }
-    .shul .addr b { color: var(--ink); }
-    .shul .times { margin-top: 10px; font-size: .88rem; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 10px; }
-    .shul-actions { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .shul-actions a { font-size: .82rem; padding: 8px 14px; border-radius: 999px; border: 1px solid #cdddf3; color: var(--techelet-deep); transition: background .2s; }
-    .shul-actions a:hover { background: var(--techelet-soft); }
+
+    .toolbar { max-width: 1000px; margin: 0 auto 18px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
+    .toolbar .search { flex: 1; min-width: 220px; max-width: 420px; position: relative; }
+    .toolbar .search input { width: 100%; padding: 12px 42px 12px 16px; border-radius: 12px; border: 1px solid var(--line); font-family: inherit; font-size: 1rem; color: var(--ink); background: #fff; box-shadow: var(--shadow-sm); }
+    .toolbar .search::before { content: "🔍"; position: absolute; top: 50%; right: 14px; transform: translateY(-50%); opacity: .6; }
+    .toolbar select { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line); font-family: inherit; font-size: 1rem; color: var(--ink); background: #fff; box-shadow: var(--shadow-sm); }
+
+    .export-bar { max-width: 1000px; margin: 0 auto 14px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .export-bar button { padding: 9px 16px; border-radius: 999px; border: 1px solid #cdddf3; background: #fff; color: var(--techelet-deep); font-family: inherit; font-size: .86rem; font-weight: 600; cursor: pointer; transition: background .2s, transform .15s; }
+    .export-bar button:hover { background: var(--techelet-soft); transform: translateY(-1px); }
+    .count-line { text-align: center; color: var(--muted); font-size: .9rem; margin-bottom: 16px; }
+
+    .table-wrap { max-width: 1000px; margin: 0 auto; overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow-sm); background: #fff; }
+    table.shuls { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    table.shuls thead th { background: var(--grad-tech); color: #fff; padding: 14px 16px; text-align: right; font-family: 'Frank Ruhl Libre', serif; font-weight: 700; white-space: nowrap; position: sticky; top: 0; }
+    table.shuls tbody td { padding: 13px 16px; border-top: 1px solid var(--line); color: var(--ink-soft); }
+    table.shuls tbody tr:nth-child(even) { background: var(--bg-tint); }
+    table.shuls tbody tr:hover { background: var(--techelet-soft); }
+    table.shuls .name { font-weight: 700; color: var(--ink); }
+    .badge { display: inline-block; font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+    .b-baladi { background: #e8f1fc; color: #143a72; }
+    .b-shami  { background: #eaf6ec; color: #235c2f; }
+    .b-sfarad { background: #f6e6ef; color: #7a2e57; }
+    .b-ashkenaz { background: #fff1d9; color: #8a5a12; }
+    .b-other  { background: #eef0f5; color: #555f78; }
+    .nav-link { color: var(--techelet); font-weight: 600; white-space: nowrap; }
+    .nav-link:hover { text-decoration: underline; }
+    .no-results { text-align: center; padding: 30px; color: var(--muted); }
+
+    @media (max-width: 640px) {
+      table.shuls thead { display: none; }
+      table.shuls, table.shuls tbody, table.shuls tr, table.shuls td { display: block; width: 100%; }
+      table.shuls tr { border-top: 4px solid var(--techelet-soft); padding: 6px 0; }
+      table.shuls td { border: none; padding: 5px 16px; }
+      table.shuls td::before { content: attr(data-label) ": "; font-weight: 700; color: var(--ink); }
+      table.shuls td.name-cell::before { content: ""; }
+      table.shuls .name { font-size: 1.1rem; }
+    }
+
+    @media print {
+      .site-header, #app-header, #app-footer, .site-footer, .toolbar, .export-bar, .map-embed,
+      .page-head p, .nav-link, .hero, .verse-band, .mikveh-sec { display: none !important; }
+      body { background: #fff; }
+      .print-head { display: block !important; text-align: center; margin-bottom: 16px; }
+      table.shuls thead th { background: #143a72 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .table-wrap { box-shadow: none; border: 1px solid #ccc; }
+      .section { padding: 0; }
+    }
+    .print-head { display: none; }
   </style>
 </head>
 <body>
@@ -47,19 +89,59 @@
   <section class="section alt">
     <div class="container">
       <div class="section-title">
-        <h2 class="gold-text">רשימת בתי הכנסת</h2>
-        <p>18 בתי כנסת · נוסח · כתובת · ניווט · זמני תפילה (מקור: המועצה הדתית)</p>
+        <h2 class="gold-text">מדריך בתי הכנסת</h2>
+        <p>חיפוש · סינון לפי נוסח · ניווט · ייצוא</p>
       </div>
-      <div class="grid" id="shulsGrid"></div>
-      <p style="text-align:center; color:var(--muted); font-size:.88rem; margin-top:24px;">
-        📋 הנתונים (שם · נוסח · כתובת) מתוך המדריך הרשמי של
+
+      <div class="print-head">
+        <h2 style="font-family:'Frank Ruhl Libre',serif;">מדריך בתי כנסת — ראש העין</h2>
+        <div>עמותת כולל הרש"ש ראש העין · מקור: המועצה הדתית ראש העין</div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search"><input type="text" id="searchBox" placeholder="חיפוש לפי שם או כתובת…" oninput="renderTable()"></div>
+        <select id="nusachFilter" onchange="renderTable()">
+          <option value="">כל הנוסחים</option>
+          <option value="תימן · בלאדי">תימן · בלאדי</option>
+          <option value="תימן · שאמי">תימן · שאמי</option>
+          <option value="ספרד">ספרד</option>
+          <option value="אשכנז">אשכנז</option>
+          <option value="ירושלים">ירושלים</option>
+          <option value="אחר">אחר / מעורב</option>
+        </select>
+      </div>
+
+      <div class="export-bar">
+        <button onclick="exportExcel()">📊 ייצוא Excel</button>
+        <button onclick="exportPDF()">📄 ייצוא PDF</button>
+        <button onclick="window.print()">🖨️ הדפסה</button>
+      </div>
+
+      <div class="count-line" id="countLine"></div>
+
+      <div class="table-wrap">
+        <table class="shuls">
+          <thead>
+            <tr>
+              <th>שם בית הכנסת</th>
+              <th>נוסח</th>
+              <th>כתובת</th>
+              <th>ניווט / זמנים</th>
+            </tr>
+          </thead>
+          <tbody id="shulsBody"></tbody>
+        </table>
+      </div>
+
+      <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-top:18px;">
+        הנתונים מתוך המדריך הרשמי של
         <a href="https://mdrh.org.il/directory-synagogues/" target="_blank" rel="noopener" style="color:var(--techelet)">המועצה הדתית ראש העין</a>.
-        לזמני תפילה מלאים ופרטי גבאים — לחצו "זמני תפילה" בכל כרטיס. נמצאו עוד בתי כנסת בעיר; אפשר להוסיף את כולם.
+        לזמני תפילה מדויקים ופרטי גבאים — לחצו "זמנים" בכל שורה. ייתכנו בתי כנסת נוספים; הרשימה מתעדכנת.
       </p>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section mikveh-sec">
     <div class="container">
       <div class="section-title">
         <h2 class="gold-text">מקוואות טהרה</h2>
@@ -68,22 +150,19 @@
       <div class="grid">
         <div class="card">
           <div class="ico">💧</div>
-          <h3>מקווה נשים</h3>
-          <p class="addr"><b>כתובת:</b> לעדכון</p>
-          <p class="addr"><b>שעות פתיחה:</b> לעדכון</p>
-          <p class="addr"><b>טלפון:</b> לעדכון</p>
+          <h3>מקוואות נשים</h3>
+          <p>ברחבי העיר פועלים מקוואות טהרה לנשים בהשגחת המועצה הדתית. למיקומים ולשעות הפעילות — אתר המועצה הדתית ראש העין.</p>
         </div>
         <div class="card">
           <div class="ico">💧</div>
-          <h3>מקווה גברים</h3>
-          <p class="addr"><b>כתובת:</b> לעדכון</p>
-          <p class="addr"><b>שעות פתיחה:</b> לעדכון</p>
+          <h3>מקוואות גברים</h3>
+          <p>מקוואות לגברים פועלים בסמוך לבתי כנסת רבים בעיר. לפרטים מדויקים — המועצה הדתית.</p>
         </div>
-        <div class="card">
+        <a class="card" href="https://mdrh.org.il/" target="_blank" rel="noopener">
           <div class="ico">ℹ️</div>
-          <h3>מידע ופרטים</h3>
-          <p>לרשימת המקוואות המלאה, מיקומים ושעות — המועצה הדתית ראש העין.</p>
-        </div>
+          <h3>המועצה הדתית ראש העין</h3>
+          <p>לרשימת המקוואות המלאה, מיקומים, שעות ופרטי קשר — לאתר הרשמי.</p>
+        </a>
       </div>
     </div>
   </section>
@@ -93,41 +172,128 @@
   <script src="components.js"></script>
   <script src="script.js"></script>
   <script>
-    // נתונים מתוך המדריך הרשמי של המועצה הדתית ראש העין (mdrh.org.il)
-    // נוסח וכתובת — מהמקור הרשמי. זמני תפילה/גבאי — לאימות באתר המועצה הדתית.
+    /* נתונים מתוך המדריך הרשמי של המועצה הדתית ראש העין (mdrh.org.il).
+       שם + נוסח + כתובת מאומתים מהמקור הרשמי. ריק = לפרטים באתר המועצה. */
     var SHULS = [
-      { name: 'משכן אפק',           nusach: 'נוסח תימן · בלאדי', address: 'קרל לינדנשטראוס 6, ראש העין' },
-      { name: 'נביאי תימן',          nusach: 'נוסח תימן · בלאדי', address: 'אליהו הנביא 45, ראש העין' },
-      { name: 'אפיקי תימן',          nusach: 'נוסח תימן · בלאדי', address: 'דרך הציונות 17, ראש העין' },
-      { name: 'משכן שמעון',          nusach: 'נוסח תימן · בלאדי', address: 'רש"י 94, ראש העין' },
-      { name: 'אוהל משה ועמנואל',    nusach: 'נוסח תימן · בלאדי', address: 'דוד המלך 1, ראש העין' },
-      { name: 'בית מנחם',            nusach: 'נוסח תימן · שאמי', address: 'צה"ל 3, ראש העין' },
-      { name: 'שם ועבר',             nusach: 'נוסח תימן · שאמי', address: 'מנצורה 40, ראש העין' },
-      { name: 'חפץ חיים',            nusach: 'נוסח תימן · שאמי', address: 'קנדי / מלכי ישראל, ראש העין' },
-      { name: 'שער השמים',           nusach: 'נוסח תימן · שאמי', address: 'צה"ל 101, ראש העין' },
-      { name: 'אהבת ישראל',          nusach: 'נוסח ספרד', address: 'יגאל אלון 1, ראש העין' },
-      { name: 'בית הכנסת הספרדי',     nusach: 'נוסח ספרד', address: 'ברקן 2, ראש העין' },
-      { name: 'הספרדי פסגות אפק (מאור ישראל)', nusach: 'נוסח ספרד', address: 'הרב שלום שבזי 182, ראש העין' },
-      { name: 'אבן העזר',            nusach: 'נוסח ספרד', address: 'מבצע דני, ראש העין' },
-      { name: 'נוה צדק',             nusach: 'נוסח אשכנז', address: 'ש"י עגנון 5, ראש העין' },
-      { name: 'סיני',                nusach: 'נוסח אשכנז', address: 'סיני 17, ראש העין' },
-      { name: 'בית הכנסת המרכזי פסגות אפק', nusach: 'בית כנסת מרכזי', address: 'נתן אלתרמן, ראש העין' },
-      { name: 'דברי קהלת',           nusach: 'בית כנסת', address: 'אפק 25, ראש העין' },
-      { name: 'ישיבת צדק ושלום',     nusach: 'נוסח ירושלים', address: 'חפץ חיים 6, ראש העין' }
+      { name: 'משכן אפק', nusach: 'תימן · בלאדי', address: 'קרל לינדנשטראוס 6' },
+      { name: 'נביאי תימן', nusach: 'תימן · בלאדי', address: 'אליהו הנביא 45' },
+      { name: 'אפיקי תימן', nusach: 'תימן · בלאדי', address: 'דרך הציונות 17' },
+      { name: 'משכן שמעון', nusach: 'תימן · בלאדי', address: 'רש"י 94' },
+      { name: 'אוהל משה ועמנואל', nusach: 'תימן · בלאדי', address: 'דוד המלך 1' },
+      { name: 'המרכז הרוחני ליהדות תימן', nusach: 'תימן', address: '' },
+      { name: 'בית מנחם', nusach: 'תימן · שאמי', address: 'צה"ל 3' },
+      { name: 'שם ועבר', nusach: 'תימן · שאמי', address: 'מנצורה 40' },
+      { name: 'חפץ חיים', nusach: 'תימן · שאמי', address: 'קנדי / מלכי ישראל' },
+      { name: 'שער השמים', nusach: 'תימן · שאמי', address: 'צה"ל 101' },
+      { name: 'אהבת ישראל', nusach: 'ספרד', address: 'יגאל אלון 1' },
+      { name: 'בית הכנסת הספרדי', nusach: 'ספרד', address: 'ברקן 2' },
+      { name: 'הספרדי פסגות אפק (מאור ישראל)', nusach: 'ספרד', address: 'הרב שלום שבזי 182' },
+      { name: 'אבן העזר', nusach: 'ספרד', address: 'מבצע דני' },
+      { name: 'חזון עובדיה', nusach: 'ספרד', address: '' },
+      { name: 'בית יוסף', nusach: 'ספרד', address: '' },
+      { name: 'אור החיים', nusach: 'ספרד', address: '' },
+      { name: 'נוה צדק', nusach: 'אשכנז', address: 'ש"י עגנון 5' },
+      { name: 'סיני', nusach: 'אשכנז', address: 'סיני 17' },
+      { name: 'ישיבת צדק ושלום', nusach: 'ירושלים', address: 'חפץ חיים 6' },
+      { name: 'בית הכנסת המרכזי פסגות אפק', nusach: 'אחר', address: 'נתן אלתרמן' },
+      { name: 'דברי קהלת', nusach: 'אחר', address: 'אפק 25' },
+      { name: 'צעירי פסגות אפק', nusach: 'אחר', address: '' },
+      { name: 'זכור לאברהם', nusach: 'אחר', address: '' },
+      { name: 'רמב"ם', nusach: 'אחר', address: '' },
+      { name: 'יד הרמב"ם', nusach: 'אחר', address: '' },
+      { name: 'כתר תורה', nusach: 'אחר', address: '' },
+      { name: 'נר יעקב', nusach: 'אחר', address: '' },
+      { name: 'בית אל', nusach: 'אחר', address: '' },
+      { name: 'מאיר נתיב', nusach: 'אחר', address: '' },
+      { name: 'היכל יצחק', nusach: 'אחר', address: '' },
+      { name: 'אהבת תורה', nusach: 'אחר', address: '' },
+      { name: 'שבט אחים', nusach: 'אחר', address: '' },
+      { name: 'אבני החושן', nusach: 'אחר', address: '' },
+      { name: 'מאור ישראל', nusach: 'אחר', address: '' },
+      { name: 'שתילי זיתים', nusach: 'אחר', address: '' },
+      { name: 'אהל יעקב', nusach: 'אחר', address: '' },
+      { name: 'מגן אבות', nusach: 'אחר', address: '' },
+      { name: 'תפארת ישראל', nusach: 'אחר', address: '' },
+      { name: 'אהבת חיים', nusach: 'אחר', address: '' },
+      { name: 'מקור חיים', nusach: 'אחר', address: '' },
+      { name: 'שערי רחמים', nusach: 'אחר', address: '' },
+      { name: 'מנחת יהודה', nusach: 'אחר', address: '' },
+      { name: 'בית כנסת חדש', nusach: 'אחר', address: 'צה"ל 55' }
     ];
+
+    var MDRH = 'https://mdrh.org.il/directory-synagogues/';
+
+    function badgeClass(n) {
+      if (n.indexOf('בלאדי') > -1) return 'b-baladi';
+      if (n.indexOf('שאמי') > -1) return 'b-shami';
+      if (n.indexOf('ספרד') > -1) return 'b-sfarad';
+      if (n.indexOf('אשכנז') > -1) return 'b-ashkenaz';
+      return 'b-other';
+    }
     function mapsLink(q) { return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q); }
-    document.getElementById('shulsGrid').innerHTML = SHULS.map(function (s) {
-      var navQuery = s.address ? (s.address) : (s.name + ' ראש העין');
-      return '<div class="card shul">' +
-        '<span class="nusach">' + s.nusach + '</span>' +
-        '<h3>' + s.name + '</h3>' +
-        '<p class="addr"><b>כתובת:</b> ' + s.address + '</p>' +
-        '<div class="shul-actions">' +
-          '<a href="' + mapsLink(navQuery) + '" target="_blank" rel="noopener">📍 ניווט במפות</a>' +
-          '<a href="https://mdrh.org.il/directory-synagogues/" target="_blank" rel="noopener">🕐 זמני תפילה</a>' +
-        '</div>' +
-      '</div>';
-    }).join('');
+
+    function filtered() {
+      var q = (document.getElementById('searchBox').value || '').trim();
+      var nf = document.getElementById('nusachFilter').value;
+      return SHULS.filter(function (s) {
+        var matchQ = !q || s.name.indexOf(q) > -1 || (s.address && s.address.indexOf(q) > -1);
+        var matchN = !nf || s.nusach === nf || (nf === 'אחר' && (s.nusach === 'אחר' || s.nusach === 'תימן'));
+        return matchQ && matchN;
+      });
+    }
+
+    function renderTable() {
+      var rows = filtered();
+      var body = document.getElementById('shulsBody');
+      document.getElementById('countLine').textContent =
+        'מציג ' + rows.length + ' מתוך ' + SHULS.length + ' בתי כנסת';
+
+      if (!rows.length) {
+        body.innerHTML = '<tr><td colspan="4" class="no-results">לא נמצאו בתי כנסת התואמים לחיפוש.</td></tr>';
+        return;
+      }
+      body.innerHTML = rows.map(function (s) {
+        var addr = s.address ? (s.address + ', ראש העין') : '—';
+        var navQ = s.address ? (s.address + ', ראש העין') : (s.name + ' ראש העין');
+        return '<tr>' +
+          '<td class="name-cell" data-label="שם"><span class="name">' + s.name + '</span></td>' +
+          '<td data-label="נוסח"><span class="badge ' + badgeClass(s.nusach) + '">' + s.nusach + '</span></td>' +
+          '<td data-label="כתובת">' + addr + '</td>' +
+          '<td data-label="ניווט"><a class="nav-link" href="' + mapsLink(navQ) + '" target="_blank" rel="noopener">📍 ניווט</a> · ' +
+            '<a class="nav-link" href="' + MDRH + '" target="_blank" rel="noopener">🕐 זמנים</a></td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    /* ===== ייצוא ===== */
+    function exportExcel() {
+      var rows = filtered();
+      var html = '<html dir="rtl"><head><meta charset="UTF-8"></head><body><table border="1"><tr>' +
+        '<th>שם בית הכנסת</th><th>נוסח</th><th>כתובת</th><th>עיר</th></tr>';
+      rows.forEach(function (s) {
+        html += '<tr><td>' + s.name + '</td><td>' + s.nusach + '</td><td>' +
+          (s.address || '') + '</td><td>ראש העין</td></tr>';
+      });
+      html += '</table></body></html>';
+      var blob = new Blob(['﻿' + html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+      downloadBlob(blob, 'בתי-כנסת-ראש-העין.xls');
+    }
+
+    function exportPDF() {
+      // יצירת PDF נקי דרך חלון הדפסה (תמיכה מלאה בעברית/RTL) — בחרו "שמירה כ-PDF"
+      window.print();
+    }
+
+    function downloadBlob(blob, filename) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    renderTable();
   </script>
 </body>
 </html>
