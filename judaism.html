@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>בתי כנסת ומקוואות בראש העין | כולל הרש"ש</title>
-  <meta name="description" content="מדריך בתי הכנסת בראש העין - מפה ורשימה במקביל, חיפוש, סינון לפי נוסח, מפה ייעודית לראש העין החדשה (פסגות אפק) וייצוא ל-PDF/Excel והדפסה. מקור: המועצה הדתית ראש העין.">
+  <meta name="description" content="מדריך בתי הכנסת בראש העין - רשימה ומפה זה לצד זה, חיפוש, סינון לפי נוסח, ניווט וייצוא ל-PDF/Excel והדפסה. מקור: המועצה הדתית ראש העין.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* פריסת מפה + רשימה במקביל */
-    .split { display: grid; grid-template-columns: 1fr 1.05fr; gap: 22px; align-items: start; max-width: 1180px; margin: 0 auto; }
+    /* רשימה (ראשונה, מימין) + מפה (שנייה, משמאל) זה לצד זה */
+    .split { display: grid; grid-template-columns: 1.05fr 1fr; gap: 22px; align-items: start; max-width: 1180px; margin: 0 auto; }
     .map-col { position: sticky; top: 86px; }
-    .map-frame { width: 100%; height: 72vh; min-height: 420px; border: 0; border-radius: var(--radius); box-shadow: var(--shadow); display: block; background: #eef; }
+    .map-frame { width: 100%; height: 70vh; min-height: 420px; border: 0; border-radius: var(--radius); box-shadow: var(--shadow); display: block; background: #eef; }
     .map-cap { text-align: center; color: var(--muted); font-size: .82rem; margin-top: 8px; }
 
     .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
@@ -26,7 +26,7 @@
     .export-bar button:hover { background: var(--techelet-soft); transform: translateY(-1px); }
     .count-line { color: var(--muted); font-size: .88rem; margin-bottom: 12px; }
 
-    .list-wrap { max-height: 72vh; overflow-y: auto; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow-sm); background: #fff; }
+    .list-wrap { max-height: 70vh; overflow-y: auto; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow-sm); background: #fff; }
     table.shuls { width: 100%; border-collapse: collapse; font-size: .93rem; }
     table.shuls thead th { background: var(--grad-tech); color: #fff; padding: 13px 14px; text-align: right; font-family: 'Frank Ruhl Libre', serif; font-weight: 700; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
     table.shuls tbody td { padding: 12px 14px; border-top: 1px solid var(--line); color: var(--ink-soft); }
@@ -44,33 +44,12 @@
     .nav-link:hover { text-decoration: underline; }
     .no-results { text-align: center; padding: 30px; color: var(--muted); }
 
-    /* מתגי טאב — לנייד בלבד */
-    .view-tabs { display: none; gap: 8px; justify-content: center; margin-bottom: 16px; }
-    .view-tabs button { flex: 1; max-width: 200px; padding: 11px; border-radius: 999px; border: 1px solid #cdddf3; background: #fff; color: var(--techelet-deep); font-family: inherit; font-weight: 700; cursor: pointer; }
-    .view-tabs button.on { background: var(--grad-tech); color: #fff; border-color: transparent; }
-
-    /* מפת ראש העין החדשה */
-    .hood-bar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
-    .hood-bar button { padding: 9px 18px; border-radius: 999px; border: 1px solid #cdddf3; background: #fff; color: var(--techelet-deep); font-family: inherit; font-weight: 700; cursor: pointer; transition: all .2s; }
-    .hood-bar button.on { background: var(--grad-tech); color: #fff; border-color: transparent; box-shadow: 0 6px 16px rgba(31,99,184,.3); }
-    .hood-bar button.emph { border-color: var(--gold); color: var(--gold-deep); position: relative; }
-    .hood-bar button.emph.on { background: var(--grad-gold); color: #fff; }
-    .hood-bar button.emph::after { content: "★"; margin-right: 5px; color: var(--gold); }
-    .hood-bar button.emph.on::after { color: #fff; }
-    .new-map-wrap { max-width: 1000px; margin: 0 auto; }
-    .new-map { width: 100%; height: 60vh; min-height: 380px; border: 0; border-radius: var(--radius); box-shadow: var(--shadow); display: block; }
-    .hood-note { text-align: center; margin-top: 14px; color: var(--ink-soft); }
-    .hood-note b { color: var(--gold-deep); }
-
+    /* נייד: הכל אחד מתחת לשני — קודם רשימה, אחר כך מפה */
     @media (max-width: 900px) {
       .split { grid-template-columns: 1fr; }
       .map-col { position: static; }
       .map-frame { height: 56vh; }
       .list-wrap { max-height: none; }
-      .view-tabs { display: flex; }
-      /* בנייד מציגים רק את מה שנבחר */
-      .split.show-list .map-col { display: none; }
-      .split.show-map .list-col { display: none; }
       table.shuls thead { display: none; }
       table.shuls, table.shuls tbody, table.shuls tr, table.shuls td { display: block; width: 100%; }
       table.shuls tr { border-top: 4px solid var(--techelet-soft); padding: 6px 0; }
@@ -82,7 +61,7 @@
 
     @media print {
       .site-header, #app-header, #app-footer, .site-footer, .toolbar, .export-bar,
-      .map-col, .view-tabs, .new-city-sec, .page-head p, .nav-link, .mikveh-sec, .hood-bar { display: none !important; }
+      .map-col, .page-head p, .nav-link, .mikveh-sec { display: none !important; }
       .split { grid-template-columns: 1fr; }
       .list-wrap { max-height: none; overflow: visible; box-shadow: none; border: 1px solid #ccc; }
       body { background: #fff; }
@@ -99,16 +78,15 @@
   <section class="page-head">
     <div class="container">
       <h1>🕍 בתי כנסת ומקוואות</h1>
-      <p>מדריך קהילתי · ראש העין</p>
+      <p>מדריך קהילתי · כל העיר ראש העין</p>
     </div>
   </section>
 
-  <!-- מפה + רשימה במקביל -->
   <section class="section">
     <div class="container">
       <div class="section-title">
         <h2 class="gold-text">מדריך בתי הכנסת</h2>
-        <p>מפה ורשימה זה לצד זה · חיפוש · סינון · ניווט · ייצוא</p>
+        <p>הרשימה מימין · המפה משמאל · חיפוש · סינון · ייצוא</p>
       </div>
 
       <div class="print-head">
@@ -116,22 +94,8 @@
         <div>עמותת כולל הרש"ש ראש העין · מקור: המועצה הדתית ראש העין</div>
       </div>
 
-      <!-- מתגים לנייד -->
-      <div class="view-tabs">
-        <button id="tabList" class="on" onclick="setView('list')">📋 רשימה</button>
-        <button id="tabMap" onclick="setView('map')">🗺️ מפה</button>
-      </div>
-
-      <div class="split show-list" id="split">
-        <!-- מפה -->
-        <div class="map-col">
-          <iframe class="map-frame" id="mainMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=%D7%91%D7%AA%D7%99%20%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%A8%D7%90%D7%A9%20%D7%94%D7%A2%D7%99%D7%9F&output=embed"
-            title="מפת בתי כנסת ראש העין"></iframe>
-          <div class="map-cap">לחיצה על בית כנסת ברשימה תמקד אותו במפה</div>
-        </div>
-
-        <!-- רשימה -->
+      <div class="split">
+        <!-- רשימה (ראשונה, מימין) -->
         <div class="list-col">
           <div class="toolbar">
             <div class="search"><input type="text" id="searchBox" placeholder="חיפוש לפי שם או כתובת…" oninput="renderTable()"></div>
@@ -158,47 +122,27 @@
             </table>
           </div>
         </div>
+
+        <!-- מפה (שנייה, משמאל) -->
+        <div class="map-col">
+          <iframe class="map-frame" id="mainMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=%D7%91%D7%AA%D7%99%20%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%A8%D7%90%D7%A9%20%D7%94%D7%A2%D7%99%D7%9F&output=embed"
+            title="מפת בתי כנסת ראש העין"></iframe>
+          <div class="map-cap">לחיצה על בית כנסת ברשימה תמקד אותו במפה</div>
+        </div>
       </div>
 
       <p style="text-align:center; color:var(--muted); font-size:.85rem; margin-top:18px;">
         הנתונים מתוך המדריך הרשמי של
         <a href="https://mdrh.org.il/directory-synagogues/" target="_blank" rel="noopener" style="color:var(--techelet)">המועצה הדתית ראש העין</a>.
-        לזמני תפילה מדויקים ופרטי גבאים — לחצו "זמנים" בכל שורה.
-      </p>
-    </div>
-  </section>
-
-  <!-- מפת ראש העין החדשה -->
-  <section class="section alt new-city-sec">
-    <div class="container">
-      <div class="section-title">
-        <h2 class="gold-text">🏙️ ראש העין החדשה — פסגות אפק</h2>
-        <p>מפה ייעודית לשכונות החדשות · עם דגש על שכונה E</p>
-      </div>
-
-      <div class="hood-bar" id="hoodBar">
-        <button data-q="פסגות אפק ראש העין" class="on" onclick="setHood(this)">כל פסגות אפק</button>
-        <button data-q="פסגות אפק A ראש העין" onclick="setHood(this)">שכונה A</button>
-        <button data-q="פסגות אפק B ראש העין" onclick="setHood(this)">שכונה B</button>
-        <button data-q="פסגות אפק C ראש העין" onclick="setHood(this)">שכונה C</button>
-        <button data-q="פסגות אפק D ראש העין" onclick="setHood(this)">שכונה D</button>
-        <button data-q="פסגות אפק שכונה E ראש העין" class="emph" onclick="setHood(this)">שכונה E</button>
-      </div>
-
-      <div class="new-map-wrap">
-        <iframe class="new-map" id="newMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=%D7%A4%D7%A1%D7%92%D7%95%D7%AA%20%D7%90%D7%A4%D7%A7%20%D7%A8%D7%90%D7%A9%20%D7%94%D7%A2%D7%99%D7%9F&output=embed"
-          title="מפת ראש העין החדשה - פסגות אפק"></iframe>
-      </div>
-
-      <p class="hood-note">
-        ⭐ <b>שכונה E</b> היא השכונה החדשה ביותר בפסגות אפק (ראש העין החדשה). בחרו שכונה למעלה כדי למקד את המפה.
+        לזמני תפילה מדויקים ופרטי גבאים — לחצו 🕐 בכל שורה.
+        למפת השכונות החדשות — <a href="newcity.html" style="color:var(--techelet)">ראש העין החדשה</a>.
       </p>
     </div>
   </section>
 
   <!-- מקוואות -->
-  <section class="section mikveh-sec">
+  <section class="section alt mikveh-sec">
     <div class="container">
       <div class="section-title">
         <h2 class="gold-text">מקוואות טהרה</h2>
@@ -229,8 +173,7 @@
   <script src="components.js"></script>
   <script src="script.js"></script>
   <script>
-    /* נתונים מתוך המדריך הרשמי של המועצה הדתית ראש העין (mdrh.org.il).
-       שם + נוסח + כתובת מאומתים מהמקור הרשמי. ריק = לפרטים באתר המועצה. */
+    /* נתונים מתוך המדריך הרשמי של המועצה הדתית ראש העין (mdrh.org.il). */
     var SHULS = [
       { name: 'משכן אפק', nusach: 'תימן · בלאדי', address: 'קרל לינדנשטראוס 6' },
       { name: 'נביאי תימן', nusach: 'תימן · בלאדי', address: 'אליהו הנביא 45' },
@@ -291,7 +234,6 @@
       });
     }
 
-    // מיקוד בית כנסת במפה הראשית (לחיצה על שורה)
     function focusShul(idx) {
       var s = SHULS[idx];
       if (!s) return;
@@ -300,7 +242,10 @@
       document.querySelectorAll('#shulsBody tr').forEach(function (tr) { tr.classList.remove('sel'); });
       var row = document.querySelector('#shulsBody tr[data-idx="' + idx + '"]');
       if (row) row.classList.add('sel');
-      if (window.matchMedia('(max-width: 900px)').matches) setView('map');
+      // בנייד — גלילה אל המפה
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        document.getElementById('mainMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
     function renderTable() {
@@ -322,29 +267,12 @@
           '<td data-label="נוסח"><span class="badge ' + badgeClass(s.nusach) + '">' + s.nusach + '</span></td>' +
           '<td data-label="כתובת">' + addr + '</td>' +
           '<td data-label="ניווט" onclick="event.stopPropagation()">' +
-            '<a class="nav-link" href="' + mapsLink(navQ) + '" target="_blank" rel="noopener">📍</a> · ' +
-            '<a class="nav-link" href="' + MDRH + '" target="_blank" rel="noopener">🕐</a></td>' +
+            '<a class="nav-link" href="' + mapsLink(navQ) + '" target="_blank" rel="noopener" title="ניווט">📍</a> · ' +
+            '<a class="nav-link" href="' + MDRH + '" target="_blank" rel="noopener" title="זמני תפילה">🕐</a></td>' +
         '</tr>';
       }).join('');
     }
 
-    /* מתגי תצוגה בנייד */
-    function setView(v) {
-      var split = document.getElementById('split');
-      split.classList.toggle('show-list', v === 'list');
-      split.classList.toggle('show-map', v === 'map');
-      document.getElementById('tabList').classList.toggle('on', v === 'list');
-      document.getElementById('tabMap').classList.toggle('on', v === 'map');
-    }
-
-    /* מפת ראש העין החדשה — בחירת שכונה */
-    function setHood(btn) {
-      document.querySelectorAll('#hoodBar button').forEach(function (b) { b.classList.remove('on'); });
-      btn.classList.add('on');
-      document.getElementById('newMap').src = embedFor(btn.getAttribute('data-q'));
-    }
-
-    /* ===== ייצוא ===== */
     function exportExcel() {
       var rows = filtered();
       var html = '<html dir="rtl"><head><meta charset="UTF-8"></head><body><table border="1"><tr>' +

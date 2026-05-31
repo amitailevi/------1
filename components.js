@@ -5,6 +5,7 @@
     ['calendar.html', 'לוח שנה'],
     ['luach.html',    'לוח זמנים'],
     ['judaism.html',  'בתי כנסת'],
+    ['newcity.html',  'ראש העין החדשה'],
     ['library.html',  'ספרייה'],
     ['rashash.html',  'הרש"ש'],
     ['about.html',    'צור קשר']
@@ -35,6 +36,7 @@
           '<a href="calendar.html">לוח שנה יהודי</a>' +
           '<a href="luach.html">לוח זמנים</a>' +
           '<a href="judaism.html">בתי כנסת ומקוואות</a>' +
+          '<a href="newcity.html">ראש העין החדשה</a>' +
           '<a href="library.html">ספרייה תורנית</a></div>' +
         '<div><h4>מורשת וקהילה</h4>' +
           '<a href="rashash.html">הרש"ש הקדוש</a>' +
